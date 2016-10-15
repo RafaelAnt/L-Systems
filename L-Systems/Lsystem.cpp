@@ -22,7 +22,7 @@
 *	My tree is 3D. I did this by rotating in all three axis when a clockwise or counter-clockwise rotation occurs. 
 *
 */
-
+/*
 #include <Windows.h>
 #include <Mmsystem.h>
 #include <GL/glut.h>
@@ -353,7 +353,7 @@ int main(int argc, char** argv){
 	glEnable(GL_LIGHT0);  
 	
 
-	/* Use depth buffering for hidden surface elimination. */
+	// Use depth buffering for hidden surface elimination.
 	glEnable(GL_DEPTH_TEST);
 
 	glutDisplayFunc(display);
@@ -365,4 +365,4 @@ int main(int argc, char** argv){
 	}
 	glutMainLoop();
 	return 0;
-}
+}*/

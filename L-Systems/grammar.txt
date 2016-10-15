@@ -1,0 +1,12 @@
+% comment example
+
+#AXIOM % second comment
+-F
+#DEGREES
+90
+#PRODUCTION
+F=F+F-F-F+F
+#END
+
+
+teste

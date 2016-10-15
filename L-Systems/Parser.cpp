@@ -1,23 +1,14 @@
 #include <iostream>
+#include <stdio.h>
 
 #include "Parser.h"
 
-using namespace std;
+#define LINE_MAX 500
+#define SAVE_TO_AXIOM 200
+#define SAVE_TO_DEGREE 201
+#define SAVE_TO_PRODUCTION_RULES 202
+#define SAVE_TO_END 203
 
-class Parser {
-	string file;
-	FILE *f;
-	char * axiom;
-	char ** productionRules;
-	int nProductionRules;
-
-public:
-	Parser();
-	Parser(string file);
-	int setFile(string file);
-	int parse();
-	int clean();
-};
 
 Parser::Parser() {
 	file = "";
@@ -30,25 +21,65 @@ Parser::Parser(string file) {
 
 int Parser::setFile(string file) {
 	this->file = file;
-	f=fopen(file.data, "r");
+	fopen_s(&f,file.c_str(), "r");
 	if (f == NULL) {
-		return FILE_NOT_FOUND;
+		return PARSER_FILE_NOT_FOUND;
 	}
-	return DONE;
+	return PARSER_DONE;
 }
 
 int Parser::parse() {
-	long lSize;
+	int saveTo = -1;
+	//int i = 0;
 
-	if (f == NULL) return FILE_NOT_FOUND;
+	char buf[LINE_MAX];
+	char * token = NULL;
+	char * nextToken = NULL;
+	char * seps = " \n\t";
+
+	if (f == NULL) return PARSER_FILE_NOT_FOUND;
 	
-	// obtain file size:
-	fseek(f, 0, SEEK_END);
-	lSize = ftell(f);
-	rewind(f);
+	while (fgets(buf, sizeof buf, f) != NULL) {
+		printf("FRASE ORIGINAL: %s\n", buf);
+		token = strtok_s(buf, seps, &nextToken);
+		printf("primeiro token: %s\n", token);
+		//printf("primeiro char: %c\n", token[0]);
+		while (token != NULL){
+			//printf("ENTREI AQUI\n");
+			if (token[0] == '%') {
+				printf("COMMENT DETETADO\n");
+				break;
+			}
+			if (strcmp(token, "#AXIOM") == 0) {
+				saveTo = SAVE_TO_AXIOM;
+				printf("AXIOMA DETETADO\n");
+				break;
+			}
+			if (strcmp(token, "#DEGREES") == 0) {
+				saveTo = SAVE_TO_DEGREE;
+				printf("DEGREE DETETADO\n");
+				break;
+			}
+			if (strcmp(token, "#PRODUCTION") == 0) {
+				saveTo = SAVE_TO_PRODUCTION_RULES;
+				printf("PRODUTION DETETADO\n");
+				break;
+			}
+			if (strcmp(token, "#END") == 0) {
+				saveTo = SAVE_TO_END;
+				printf("FIM DETETADO\n");
+				break;
+			}
 
-	fread(axiom, 1, 10, f);
+			printf("%s\n", token);
+			token = strtok_s(NULL, seps, &nextToken);
+		}
 
+		if (saveTo == SAVE_TO_END) break;
+	}
+	
+	parsed = true;
+	return PARSER_DONE;
 }
 
 int Parser::clean() {
@@ -60,6 +91,7 @@ int Parser::clean() {
 	axiom = NULL;
 	productionRules = NULL;
 	nProductionRules = 0;
+	parsed = false;
 
-	return DONE;
+	return PARSER_DONE;
 }
