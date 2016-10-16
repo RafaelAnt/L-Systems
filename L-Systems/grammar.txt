@@ -1,4 +1,4 @@
-% comment example
+% No BLANK Spaces Allowed!!!
 
 #AXIOM % second comment
 -F
@@ -6,7 +6,8 @@
 90
 #PRODUCTION
 F=F+F-F-F+F
+TTTT=D
 #END
 
 
-teste
+Depois do #END não faz nada...

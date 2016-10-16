@@ -1,16 +1,36 @@
 #pragma once
 #include<iostream>
+#include <list>
 
 #define PARSER_DONE 0
 #define PARSER_FILE_NOT_FOUND 100
+#define PARSER_SYNTAX_ERROR 101
+#define PARSER_UNKNOWN_ERROR 102
+#define PARSER_AXIOM_INVALID_CHARACTERS 103
+#define PARSER_DEGREE_INVALID_CHARACTERS 104
+#define PARSER_PRODUCTION_RULE_INVALID_CHARACTERS 105
+#define PARSER_PRODUCTION_RULE_EQUALS_ERROR 106
+#define PARSER_PRODUCTION_RULE_MORE_THAN_1_LEFT 107
+#define PARSER_PRODUCTION_RULE_EQUALS_ERROR 108
+
 
 using namespace std;
+
+class ProductionRule {
+	char target;
+	char * result;
+
+public:
+	ProductionRule(char target, char* result);
+	//int separateProdRule(char * rule);
+};
 
 class Parser {
 	string file;
 	FILE *f;
 	char * axiom;
-	char ** productionRules;
+	float degree;
+	list<ProductionRule> productionRules;
 	int nProductionRules;
 	bool parsed;
 
@@ -20,4 +40,7 @@ public:
 	int setFile(string file);
 	int parse();
 	int clean();
+private:
+	bool hasInvalidChar(int type, char* string);
 };
+
