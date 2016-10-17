@@ -1,4 +1,9 @@
-﻿  Parser.cpp
+﻿  Main.cpp
+c:\users\rafael\documents\github\l-systems\l-systems\Parser.h(14): warning C4005: 'PARSER_PRODUCTION_RULE_EQUALS_ERROR': macro redefinition
+  c:\users\rafael\documents\github\l-systems\l-systems\Parser.h(12): note: see previous definition of 'PARSER_PRODUCTION_RULE_EQUALS_ERROR'
+  Parser.cpp
+c:\users\rafael\documents\github\l-systems\l-systems\Parser.h(14): warning C4005: 'PARSER_PRODUCTION_RULE_EQUALS_ERROR': macro redefinition
+  c:\users\rafael\documents\github\l-systems\l-systems\Parser.h(12): note: see previous definition of 'PARSER_PRODUCTION_RULE_EQUALS_ERROR'
   Generating code
   3 of 133 functions ( 2.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
