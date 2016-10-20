@@ -11,7 +11,7 @@
 #define PARSER_PRODUCTION_RULE_INVALID_CHARACTERS 105
 #define PARSER_PRODUCTION_RULE_EQUALS_ERROR 106
 #define PARSER_PRODUCTION_RULE_MORE_THAN_1_LEFT 107
-#define PARSER_PRODUCTION_RULE_EQUALS_ERROR 108
+//#define PARSER_PRODUCTION_RULE_EQUALS_ERROR 108
 
 
 using namespace std;
@@ -22,6 +22,8 @@ class ProductionRule {
 
 public:
 	ProductionRule(char target, char* result);
+	char getTarget();
+	char* getResult();
 	//int separateProdRule(char * rule);
 };
 
@@ -37,10 +39,15 @@ class Parser {
 public:
 	Parser();
 	Parser(string file);
+	char* getAxiom();
+	float getDegree();
+	list<ProductionRule> getProductionRules();
+	int getNProductionRules();
 	int setFile(string file);
 	int parse();
 	int clean();
 private:
 	bool hasInvalidChar(int type, char* string);
+	int addProdutionRule(char target, char* result);
+	int separate(char* prodRule, char * target, char** result);
 };
-

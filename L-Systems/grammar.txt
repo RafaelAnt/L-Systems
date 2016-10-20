@@ -6,7 +6,6 @@
 90
 #PRODUCTION
 F=F+F-F-F+F
-TTTT=D
 #END
 
 
