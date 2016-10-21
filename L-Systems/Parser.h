@@ -11,7 +11,6 @@
 #define PARSER_PRODUCTION_RULE_INVALID_CHARACTERS 105
 #define PARSER_PRODUCTION_RULE_EQUALS_ERROR 106
 #define PARSER_PRODUCTION_RULE_MORE_THAN_1_LEFT 107
-//#define PARSER_PRODUCTION_RULE_EQUALS_ERROR 108
 
 
 using namespace std;
@@ -46,6 +45,8 @@ public:
 	int setFile(string file);
 	int parse();
 	int clean();
+	void printGrammar();
+	string expand(int n);
 private:
 	bool hasInvalidChar(int type, char* string);
 	int addProdutionRule(char target, char* result);

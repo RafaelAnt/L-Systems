@@ -77,7 +77,7 @@ int Parser::separate(char* prodRule, char * target, char** result) {
 	esq = strtok_s(prodRule, "=", &dir);
 
 	
-	//gprintf("Sizeof esq: %d\n", strlen(esq));
+	//printf("Sizeof esq: %d\n", strlen(esq));
 	if (strlen(esq) > 1) return PARSER_PRODUCTION_RULE_MORE_THAN_1_LEFT;
 	if (!isalpha(esq[0])) return PARSER_PRODUCTION_RULE_INVALID_CHARACTERS;
 
@@ -194,8 +194,6 @@ int Parser::parse() {
 				return PARSER_UNKNOWN_ERROR;
 			}
 			
-
-			//printf("%s\n", token);
 			token = strtok_s(NULL, seps, &nextToken);
 		}
 
@@ -204,14 +202,6 @@ int Parser::parse() {
 
 	}
 
-	/*
-	// print production rules: Debug
-	list<ProductionRule>::iterator it;
-	for (it = this->productionRules.begin(); it != this->productionRules.end(); it++) {
-		ProductionRule aux = *it;
-		printf("PRODUTION RULE:\n\tTarget: %c\n\tResult: %s\n", aux.getTarget(), aux.getResult());
-	}
-	*/
 
 	parsed = true;
 	return PARSER_DONE;
@@ -230,6 +220,56 @@ int Parser::clean() {
 	degree = 0;
 
 	return PARSER_DONE;
+}
+
+void Parser::printGrammar(){
+	if (!parsed) return;
+
+	list<ProductionRule>::iterator it;
+
+	printf("AXIOM: %s\n", getAxiom());
+	printf("DEGREE: %f\n", getDegree());
+
+
+	for (it = productionRules.begin(); it != productionRules.end(); it++) {
+		ProductionRule aux = *it;
+		printf("PRODUTION RULE:\n\tTarget: %c\n\tResult: %s\n", aux.getTarget(), aux.getResult());
+	}
+}
+
+string Parser::expand(int n){
+	if (!parsed) return nullptr;
+	
+	string result=getAxiom();
+	char ch;
+	list<ProductionRule>::iterator it;
+	
+
+	if (n < 1) return result;
+	
+	//printf("A expandir %s\n", getAxiom());
+	//printf("A expandir %s\n", result.data());
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < result.length(); j++) {
+			ch = result.at(j);
+			//printf("\tA procurar char %c\n",ch);
+			for (it = productionRules.begin(); it != productionRules.end(); it++) {
+				ProductionRule aux = *it;
+				if (aux.getTarget() == ch) {
+					//printf("\t\tEncontrado!\n");
+					result.replace(j, 1, aux.getResult());
+					//printf("\t\tSubstituido por %s\n", aux.getResult());
+					//printf("\t\t\tTamanho: %d\n\t\t\tAte agora esta: %s\n", result.length(), result.data());
+					j = j + (strlen(aux.getResult()) - 1);
+					break;
+				}
+			}
+		}
+		//printf("i:  %d\nString final: %s\n", i, result.data());
+	}
+
+	return result;
 }
 
 bool Parser::hasInvalidChar(int type, char* string) {
