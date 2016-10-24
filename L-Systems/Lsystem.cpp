@@ -139,7 +139,6 @@ void drawLine(){
 
 
 void draw(){
-	
 	string ch = "";
 	string LSystem = trees->at(depth);
 	for (int i = 0; i < LSystem.length(); i++){
