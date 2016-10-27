@@ -14,16 +14,16 @@ using namespace std;
 
 double lastTime = 0, elapsedTime = 0, lastElapsedTime = 0;
 
-float lineWidth = 6;
+float lineWidth = 3;
 float angle = 0;
 float degree = 0;
 float depth = 0;
 float length = 0.001;
 
 
-float eyeX = 10;
-float eyeY = 50;
-float eyeZ = 10;
+float eyeX = 30;
+float eyeY = 40;
+float eyeZ = 0;
 float lookX = 0;
 float lookY = 0;
 float lookZ = 0;
@@ -33,23 +33,23 @@ vector<string> *stages = new vector<string>();
 void push() {
 	glPushMatrix();
 	if (lineWidth > 0)
-		lineWidth -= 1;
+		lineWidth -= 0.5;
 }
 
 void pop() {
 	glPopMatrix();
-	lineWidth += 1;
+	lineWidth += 0.5;
 }
 
 void rotL() {
 	glRotatef(degree, 1, 0, 0);
-	//glRotatef(degree * 4, 0, 1, 0);
+	glRotatef(degree, 0, 1, 0);
 	glRotatef(degree, 0, 0, 1);
 }
 
 void rotR() {
 	glRotatef(-degree, 1, 0, 0);
-	//glRotatef(degree * 4, 0, 1, 0);
+	glRotatef(degree, 0, 1, 0);
 	glRotatef(-degree, 0, 0, 1);
 }
 
@@ -58,9 +58,9 @@ void drawLine() {
 
 
 								  //glColor3f(0.55, 0.27, 0.07);
-	GLfloat ambient[4] = { 0.55, 0.27, 0.07 };    // ambient reflection
-	GLfloat specular[4] = { 0.55, 0.27, 0.07 };   // specular reflection
-	GLfloat diffuse[4] = { 0.55, 0.27, 0.07 };   // diffuse reflection
+	GLfloat ambient[4] = { 0.55f, 0.27f, 0.07f };    // ambient reflection
+	GLfloat specular[4] = { 0.55f, 0.27f, 0.07f };   // specular reflection
+	GLfloat diffuse[4] = { 0.55f, 0.27f, 0.07f };   // diffuse reflection
 
 
 												 // set the ambient reflection for the object
@@ -72,9 +72,8 @@ void drawLine() {
 	glLineWidth(lineWidth);
 
 	glBegin(GL_LINES);
-
-	glVertex3f(0, 0, 0);
-	glVertex3f(0, length, 0);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, length, 0);
 	glEnd();
 
 	glTranslatef(0, length, 0);
@@ -84,8 +83,14 @@ void drawLine() {
 
 void draw() {
 	char ch;
-	string LSystem = stages->at(depth);
-	for (int i = 0; i < LSystem.length(); i++) {
+	string LSystem;
+	if (depth > EXPANSIONS_NUMBER) {
+		LSystem = stages->at(EXPANSIONS_NUMBER-1);
+	}else{
+		LSystem = stages->at(depth);
+	}
+	
+	for (unsigned int i = 0; i < LSystem.length(); i++) {
 		ch = LSystem.at(i);
 
 		switch (ch) {
@@ -134,7 +139,8 @@ void display(void) {
 	glPushMatrix();
 
 	//EIXOS
-	glBegin(GL_LINES);           
+	glLineWidth(1);
+	/*glBegin(GL_LINES);           
 	// draw line for x axis red
 	glColor3f(1.0, 0.0, 0.0);
 	glVertex3f(0.0, 0.0, 0.0);
@@ -147,27 +153,27 @@ void display(void) {
 	glColor3f(0.0, 0.0, 1.0);
 	glVertex3f(0.0, 0.0, 0.0);
 	glVertex3f(0.0, 0.0, axisDist);
-	glEnd();
+	glEnd();*/
 
-	glColor3f(1.0, 0.75, 0.3);
-	glutSolidCube(1);
-	glColor3f(0, 0, 0);
+	//glColor3f(1.0, 0.75, 0.3);
+	//glutSolidCube(1);
+	//glColor3f(0, 0, 0);
 	glPopMatrix();
 
 	glPushMatrix();
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glPushAttrib(GL_LIGHTING_BIT); //saves current lighting stuff
-	GLfloat ambient[4] = { 0.82, 0.41, 0.12 };    // ambient reflection
-	GLfloat diffuse[4] = { 0.82, 0.41, 0.12 };   // diffuse reflection    
+	GLfloat ambient[4] = { 0.82f, 0.41f, 0.12f };    // ambient reflection
+	GLfloat diffuse[4] = { 0.82f, 0.41f, 0.12f };   // diffuse reflection    
 												 // set the ambient reflection for the object
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
 	// set the diffuse reflection for the object
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 
-	//glColor3f(1.0, 0, 0);
+	glColor3f(0.5, 0.5, 0.3);
 	glBegin(GL_TRIANGLES);
-	//glColor3f(1.0, 0, 0);
+	glColor3f(1.0, 0, 0);
 	glVertex3f(-20, 0, -20);
 	glVertex3f(20, 0, -20);
 	glVertex3f(20, 0, 20);
@@ -178,8 +184,8 @@ void display(void) {
 
 	glPopMatrix();
 	glPopAttrib();
-
-	//draw();
+	glColor3f(0, 1, 0);
+	draw();
 	glutSwapBuffers();
 	glutPostRedisplay();
 }
@@ -212,13 +218,13 @@ void animate() {
 	}
 	ANGLE += incr;*/
 
-	if (depth < EXPANSIONS_NUMBER)
+	if (depth < EXPANSIONS_NUMBER-1)
 		length += 0.001;
 
-	if (elapsedTime - lastElapsedTime > 2000 && depth < EXPANSIONS_NUMBER) {
+	if (elapsedTime - lastElapsedTime > 2000 && depth < EXPANSIONS_NUMBER-1) {
 		depth++;
 		lastElapsedTime = elapsedTime;
-		cout << "a ";
+		cout << "a\n";
 
 	}
 
@@ -342,14 +348,11 @@ int main(int argc, char** argv) {
 	string expanded;
 	stages = new vector<string>();
 	for (int i = 0; i < EXPANSIONS_NUMBER; i++) {
-		expanded = parser.expand(i);
+		expanded = parser.expand(i+1);
 		stages->push_back(expanded);
 		//printf("Expanded %d times resulted in:\n%s\n\n\n", i, stages->at(i).data());
 		
 	}
-
-	
-	
 
 	glutMain(argc, argv);
 
