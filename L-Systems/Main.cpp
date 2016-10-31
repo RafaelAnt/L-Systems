@@ -8,7 +8,7 @@
 #include "Parser.h"
 
 #define PI 3.1415
-#define EXPANSIONS_NUMBER 5
+#define EXPANSIONS_NUMBER 4
 
 using namespace std;
 
@@ -218,8 +218,12 @@ void animate() {
 	}
 	ANGLE += incr;*/
 
-	if (depth < EXPANSIONS_NUMBER-1)
+	if (depth < EXPANSIONS_NUMBER - 1) {
 		length += 0.001;
+		eyeX += 0.05;
+		eyeY += 0.05;
+	}
+		
 
 	if (elapsedTime - lastElapsedTime > 2000 && depth < EXPANSIONS_NUMBER-1) {
 		depth++;
