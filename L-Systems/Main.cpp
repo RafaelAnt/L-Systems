@@ -8,7 +8,7 @@
 #include "Parser.h"
 
 #define PI 3.1415
-#define EXPANSIONS_NUMBER 4
+#define EXPANSIONS_NUMBER 5
 
 using namespace std;
 
@@ -19,14 +19,17 @@ float angle = 0;
 float degree = 0;
 float depth = 0;
 float length = 0.001;
+float length2 = 0.001;
 
 
-float eyeX = 30;
-float eyeY = 40;
+float eyeX = 50;
+float eyeY = 50;
 float eyeZ = 0;
 float lookX = 0;
-float lookY = 0;
+float lookY = 20;
 float lookZ = 0;
+
+float stage = 0;
 
 vector<string> *stages = new vector<string>();
 
@@ -70,13 +73,30 @@ void drawLine() {
 	// set the specular reflection for the object      
 	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 	glLineWidth(lineWidth);
+	if (stage == depth) {
+		glBegin(GL_LINES);
+			glVertex3f(0, 0, 0);
+			glVertex3f(0, length, 0);
+		glEnd();
+		glTranslatef(0, length, 0);
+	}
+	if(stage < depth){
+		glBegin(GL_LINES);
+			glVertex3f(0, 0, 0);
+			glVertex3f(0, 1, 0);
+		glEnd();
+		glTranslatef(0, 1, 0);
+	}
+	if (stage == depth+1 && length>0.5) {
+		glBegin(GL_LINES);
+			glVertex3f(0, 0, 0);
+			glVertex3f(0, length2, 0);
+		glEnd();
+		glTranslatef(0, length2, 0);
+	}
 
-	glBegin(GL_LINES);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, length, 0);
-	glEnd();
 
-	glTranslatef(0, length, 0);
+	
 	glPopAttrib();
 }
 
@@ -84,22 +104,25 @@ void drawLine() {
 void draw() {
 	char ch;
 	string LSystem;
-	if (depth > EXPANSIONS_NUMBER) {
+	/*if (depth > EXPANSIONS_NUMBER) {
 		LSystem = stages->at(EXPANSIONS_NUMBER-1);
 	}else{
 		LSystem = stages->at(depth);
-	}
-	
+	}*/
+	LSystem = stages->at(EXPANSIONS_NUMBER - 1);
+
 	for (unsigned int i = 0; i < LSystem.length(); i++) {
 		ch = LSystem.at(i);
 
 		switch (ch) {
 		case '[':
 			push();
+			stage++;
 			break;
 
 		case ']':
 			pop();
+			stage--;
 			break;
 
 		case '+':
@@ -217,22 +240,43 @@ void animate() {
 		}
 	}
 	ANGLE += incr;*/
+	
+	if (depth == EXPANSIONS_NUMBER - 1) {
+		if(length2<1) length2 += 0.001;
+		return;
+	}
 
-	if (depth < EXPANSIONS_NUMBER - 1) {
+	if (length < 1 ) {
+
+		length += 0.001;
+		//eyeX += 0.02;
+		//eyeY += 0.02;
+		if (length > 0.5) {
+			length2 += 0.001;
+		}
+	}
+	else {
+		depth++;
+		stage = 0;
+		length = 0.5;
+		length2 = 0.001;
+	}
+
+	/*if (depth < EXPANSIONS_NUMBER - 1) {
 		length += 0.001;
 		eyeX += 0.05;
 		eyeY += 0.05;
-	}
+	}*/
 		
 
-	if (elapsedTime - lastElapsedTime > 2000 && depth < EXPANSIONS_NUMBER-1) {
+	/*if (elapsedTime - lastElapsedTime > 2000 && depth < EXPANSIONS_NUMBER-1) {
 		depth++;
 		lastElapsedTime = elapsedTime;
 		cout << "a\n";
 
-	}
+	}*/
 
-	elapsedTime = elapsedTime / 5000;
+	//elapsedTime = elapsedTime / 5000;
 	//float t = (sin((elapsedTime*PI - PI / 2)) + 1) / 2;
 	//float p = (1 - t)*STARTX + t*ENDX;
 
@@ -269,6 +313,15 @@ void keyboard(unsigned char key, int x, int y){
 
 	case '-':
 		eyeY -= 1;
+		break;
+
+	case 'r':
+		depth = 0;
+		eyeX = 30;
+		eyeY = 40;
+		lastTime = 0;
+		lastElapsedTime = 0;
+		length = 0.001;
 		break;
 
 	default:
