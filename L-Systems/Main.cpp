@@ -14,12 +14,13 @@ using namespace std;
 
 double lastTime = 0, elapsedTime = 0, lastElapsedTime = 0;
 
-float lineWidth = 3;
+
 float angle = 0;
 float degree = 0;
 float depth = 0;
-float length = 0.001;
-float length2 = 0.001;
+
+float length[EXPANSIONS_NUMBER];
+float lineWidth[EXPANSIONS_NUMBER];
 
 
 float eyeX = 50;
@@ -34,12 +35,14 @@ float stage = 0;
 vector<string> *stages = new vector<string>();
 
 void push() {
+	stage++;
 	glPushMatrix();
 	if (lineWidth > 0)
 		lineWidth -= 0.5;
 }
 
 void pop() {
+	stage--;
 	glPopMatrix();
 	lineWidth += 0.5;
 }
@@ -72,6 +75,8 @@ void drawLine() {
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 	// set the specular reflection for the object      
 	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+
+	// Stage is the push count, Depth is the current 
 	glLineWidth(lineWidth);
 	if (stage == depth) {
 		glBegin(GL_LINES);
@@ -87,12 +92,26 @@ void drawLine() {
 		glEnd();
 		glTranslatef(0, 1, 0);
 	}
-	if (stage == depth+1 && length>0.5) {
+	if (stage == depth+1 && length>0.25) {
 		glBegin(GL_LINES);
 			glVertex3f(0, 0, 0);
 			glVertex3f(0, length2, 0);
 		glEnd();
 		glTranslatef(0, length2, 0);
+	}
+	if (stage == depth + 2 && length > 0.5) {
+		glBegin(GL_LINES);
+			glVertex3f(0, 0, 0);
+			glVertex3f(0, length3, 0);
+			glEnd();
+		glTranslatef(0, length3, 0);
+	}
+	if (stage == depth + 3 && length > 0.75) {
+		glBegin(GL_LINES);
+			glVertex3f(0, 0, 0);
+			glVertex3f(0, length4, 0);
+		glEnd();
+		glTranslatef(0, length4, 0);
 	}
 
 
@@ -117,12 +136,12 @@ void draw() {
 		switch (ch) {
 		case '[':
 			push();
-			stage++;
+			
 			break;
 
 		case ']':
 			pop();
-			stage--;
+
 			break;
 
 		case '+':
@@ -159,10 +178,10 @@ void display(void) {
 	gluLookAt(eyeX, eyeY, eyeZ, lookX, lookY, lookZ, 0, 1, 0);
 	
 
-	glPushMatrix();
+	//glPushMatrix();
 
 	//EIXOS
-	glLineWidth(1);
+	//glLineWidth(1);
 	/*glBegin(GL_LINES);           
 	// draw line for x axis red
 	glColor3f(1.0, 0.0, 0.0);
@@ -181,7 +200,7 @@ void display(void) {
 	//glColor3f(1.0, 0.75, 0.3);
 	//glutSolidCube(1);
 	//glColor3f(0, 0, 0);
-	glPopMatrix();
+	//glPopMatrix();
 
 	glPushMatrix();
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -242,7 +261,7 @@ void animate() {
 	ANGLE += incr;*/
 	
 	if (depth == EXPANSIONS_NUMBER - 1) {
-		if(length2<1) length2 += 0.001;
+		if(length2 < 1) length2 += 0.001;
 		return;
 	}
 
@@ -251,15 +270,23 @@ void animate() {
 		length += 0.001;
 		//eyeX += 0.02;
 		//eyeY += 0.02;
-		if (length > 0.5) {
+		if (length > 0.25) {
 			length2 += 0.001;
+		}
+		if(length > 0.5){
+			length3 += 0.001;
+		}
+		if (length > 0.75) {
+			length4 += 0.001;
 		}
 	}
 	else {
 		depth++;
 		stage = 0;
-		length = 0.5;
-		length2 = 0.001;
+		length = 0.75;
+		length2 = 0.5;
+		length3 = 0.25;
+		length4 = 0.0001;
 	}
 
 	/*if (depth < EXPANSIONS_NUMBER - 1) {
@@ -317,11 +344,14 @@ void keyboard(unsigned char key, int x, int y){
 
 	case 'r':
 		depth = 0;
-		eyeX = 30;
-		eyeY = 40;
-		lastTime = 0;
-		lastElapsedTime = 0;
-		length = 0.001;
+		stage = 0;
+		//eyeX = 30;
+		//eyeY = 40;
+		//lastTime = 0;
+		//lastElapsedTime = 0;
+		//length = 0.001;
+		//length2 = 0;
+
 		break;
 
 	default:
@@ -345,6 +375,11 @@ void glutMain(int argc, char** argv) {
 	glutKeyboardFunc(keyboard);
 	glutIdleFunc(animate);
 
+
+	for (int i = 0; i < EXPANSIONS_NUMBER; i++) {
+		length[i] = 0.001;
+		lineWidth[i] = (float)(i - (0.5 * i));
+	}
 
 	glutMainLoop();
 }
