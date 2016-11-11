@@ -30,21 +30,17 @@ float lookX = 0;
 float lookY = 20;
 float lookZ = 0;
 
-float stage = 0;
+int stage = 0;
 
 vector<string> *stages = new vector<string>();
 
 void push() {
 	stage++;
 	glPushMatrix();
-	if (lineWidth > 0)
-		lineWidth -= 0.5;
 }
 
 void pop() {
 	stage--;
-	glPopMatrix();
-	lineWidth += 0.5;
 }
 
 void rotL() {
@@ -77,7 +73,7 @@ void drawLine() {
 	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
 	// Stage is the push count, Depth is the current 
-	glLineWidth(lineWidth);
+	glLineWidth(lineWidth[stage]);
 	if (stage == depth) {
 		glBegin(GL_LINES);
 			glVertex3f(0, 0, 0);
