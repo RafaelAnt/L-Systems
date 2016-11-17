@@ -8,31 +8,33 @@
 #include "Parser.h"
 
 #define PI 3.1415
-#define EXPANSIONS_NUMBER 5
+#define EXPANSIONS_NUMBER 3
 
 using namespace std;
 
 double lastTime = 0, elapsedTime = 0, lastElapsedTime = 0;
 
-
-float angle = 0;
 float degree = 0;
-float depth = 0;
 
 float length[EXPANSIONS_NUMBER];
 float lineWidth[EXPANSIONS_NUMBER];
+int linesNumber[EXPANSIONS_NUMBER];
+int linesToDraw[EXPANSIONS_NUMBER];
+int lastDrawn[EXPANSIONS_NUMBER];
 
 
 float eyeX = 50;
 float eyeY = 50;
 float eyeZ = 0;
 float lookX = 0;
-float lookY = 20;
+float lookY = 30;
 float lookZ = 0;
 
 int stage = 0;
+int speed = 0.01;
 
-vector<string> *stages = new vector<string>();
+string expanded;
+//vector<string> *stages = new vector<string>();
 
 void push() {
 	stage++;
@@ -40,6 +42,7 @@ void push() {
 }
 
 void pop() {
+	glPopMatrix();
 	stage--;
 }
 
@@ -55,89 +58,88 @@ void rotR() {
 	glRotatef(-degree, 0, 0, 1);
 }
 
+int getTotalLines() {
+	int r=0;
+	for (int i = 0; i < EXPANSIONS_NUMBER; i++) {
+		r += linesNumber[i];
+	}
+	return r;
+}
+
 void drawLine() {
 	glPushAttrib(GL_LIGHTING_BIT);//saves current lighting stuff
 
-
-								  //glColor3f(0.55, 0.27, 0.07);
 	GLfloat ambient[4] = { 0.55f, 0.27f, 0.07f };    // ambient reflection
 	GLfloat specular[4] = { 0.55f, 0.27f, 0.07f };   // specular reflection
 	GLfloat diffuse[4] = { 0.55f, 0.27f, 0.07f };   // diffuse reflection
 
-
-												 // set the ambient reflection for the object
+	// set the ambient reflection for the object
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
 	// set the diffuse reflection for the object
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 	// set the specular reflection for the object      
 	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
-	// Stage is the push count, Depth is the current 
-	glLineWidth(lineWidth[stage]);
-	if (stage == depth) {
+	// Stage is the push count
+
+	//glLineWidth(lineWidth[stage] - (linesNumber[stage] * 0.001));
+	glLineWidth(1);
+	/*
+	if (linesNumber[stage] <= linesToDraw[stage] && linesNumber[stage] > lastDrawn[stage]) {
 		glBegin(GL_LINES);
-			glVertex3f(0, 0, 0);
-			glVertex3f(0, length, 0);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, length[stage], 0);
 		glEnd();
-		glTranslatef(0, length, 0);
+		glTranslatef(0, length[stage], 0);
 	}
-	if(stage < depth){
+	
+	if (linesNumber[stage] <= linesToDraw[stage] && linesNumber[stage] < lastDrawn[stage]) {
 		glBegin(GL_LINES);
-			glVertex3f(0, 0, 0);
-			glVertex3f(0, 1, 0);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 1, 0);
 		glEnd();
 		glTranslatef(0, 1, 0);
 	}
-	if (stage == depth+1 && length>0.25) {
+	*/
+
+	if (getTotalLines() <= linesToDraw[0]) {
 		glBegin(GL_LINES);
-			glVertex3f(0, 0, 0);
-			glVertex3f(0, length2, 0);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 1, 0);
 		glEnd();
-		glTranslatef(0, length2, 0);
+		glTranslatef(0, 1, 0);
 	}
-	if (stage == depth + 2 && length > 0.5) {
+	if (getTotalLines() == linesToDraw[0]) {
 		glBegin(GL_LINES);
-			glVertex3f(0, 0, 0);
-			glVertex3f(0, length3, 0);
-			glEnd();
-		glTranslatef(0, length3, 0);
-	}
-	if (stage == depth + 3 && length > 0.75) {
-		glBegin(GL_LINES);
-			glVertex3f(0, 0, 0);
-			glVertex3f(0, length4, 0);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, length[0], 0);
 		glEnd();
-		glTranslatef(0, length4, 0);
+		glTranslatef(0, length[0], 0);
 	}
 
 
-	
+
 	glPopAttrib();
 }
 
 
 void draw() {
 	char ch;
-	string LSystem;
-	/*if (depth > EXPANSIONS_NUMBER) {
-		LSystem = stages->at(EXPANSIONS_NUMBER-1);
-	}else{
-		LSystem = stages->at(depth);
-	}*/
-	LSystem = stages->at(EXPANSIONS_NUMBER - 1);
+	stage = 0;
+	for (int i = 0; i < EXPANSIONS_NUMBER; i++) {
+		linesNumber[i] = 0;
+	}
 
-	for (unsigned int i = 0; i < LSystem.length(); i++) {
-		ch = LSystem.at(i);
+	for (unsigned int i = 0; i < expanded.length(); i++) {
+		ch = expanded.at(i);
 
 		switch (ch) {
 		case '[':
 			push();
-			
 			break;
 
 		case ']':
 			pop();
-
 			break;
 
 		case '+':
@@ -149,6 +151,7 @@ void draw() {
 			break;
 
 		case 'F':
+			linesNumber[stage]++;
 			drawLine();
 			break;
 
@@ -209,15 +212,14 @@ void display(void) {
 	// set the diffuse reflection for the object
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 
-	glColor3f(0.5, 0.5, 0.3);
 	glBegin(GL_TRIANGLES);
-	glColor3f(1.0, 0, 0);
-	glVertex3f(-20, 0, -20);
-	glVertex3f(20, 0, -20);
-	glVertex3f(20, 0, 20);
-	glVertex3f(-20, 0, 20);
-	glVertex3f(-20, 0, -20);
-	glVertex3f(20, 0, 20);
+		glColor3f(1.0, 0, 0);
+		glVertex3f(-10, 0, -10);
+		glVertex3f(10, 0, -10);
+		glVertex3f(10, 0, 10);
+		glVertex3f(-10, 0, 10);
+		glVertex3f(-10, 0, -10);
+		glVertex3f(10, 0, 10);
 	glEnd();
 
 	glPopMatrix();
@@ -234,76 +236,47 @@ void animate() {
 
 	elapsedTime = timeGetTime() - lastTime;
 
-	// Change the angle to make it blow in the wind
-	/*float numR = (float)rand() / RAND_MAX;
+	// TODO: Change the angle to make it blow in the wind
 
 
-	if (ANGLE > 21.5) {
-		if (numR < 0.5) {
-			incr = -0.15;
-		}
-		else {
-			incr = -0.1;
-		}
-	}
-	else if (ANGLE < 18.5) {
-		if (numR > 0.5) {
-			incr = 0.15;
-		}
-		else {
-			incr = 0.1;
-		}
-	}
-	ANGLE += incr;*/
-	
-	if (depth == EXPANSIONS_NUMBER - 1) {
-		if(length2 < 1) length2 += 0.001;
-		return;
-	}
-
-	if (length < 1 ) {
-
-		length += 0.001;
-		//eyeX += 0.02;
-		//eyeY += 0.02;
-		if (length > 0.25) {
-			length2 += 0.001;
-		}
-		if(length > 0.5){
-			length3 += 0.001;
-		}
-		if (length > 0.75) {
-			length4 += 0.001;
-		}
+	if (length[0] < 1) {
+		length[0] += 0.01;
+		lineWidth[0] += 0.01;
 	}
 	else {
-		depth++;
-		stage = 0;
-		length = 0.75;
-		length2 = 0.5;
-		length3 = 0.25;
-		length4 = 0.0001;
+		//lastDrawn[0] = linesToDraw[0];
+		linesToDraw[0] += 1;
+		//printf("lines do draw: %d    Lines Number: %d\n", linesToDraw[0], linesNumber[0]);
+		length[0] = 0.001;
+	}
+	/*
+	if (length[0] < 1) {
+		length[0] += 0.01;
+		lineWidth[0] += 0.01;
+	}
+	else {
+		lastDrawn[0] = linesToDraw[0];
+		linesToDraw[0]+=1;
+		//printf("lines do draw: %d    Lines Number: %d\n", linesToDraw[0], linesNumber[0]);
+		length[0] = 0.001;
 	}
 
-	/*if (depth < EXPANSIONS_NUMBER - 1) {
-		length += 0.001;
-		eyeX += 0.05;
-		eyeY += 0.05;
-	}*/
-		
+	
+	for (int i = 1; i < EXPANSIONS_NUMBER; i++) {
+		if (lastDrawn[i - 1] > 10*i) {
+			if (length[i] < 1) {
+				length[i] += 0.01;
+				lineWidth[i] += 0.01;
+			}
+			else {
+				lastDrawn[i] = linesToDraw[i];
+				linesToDraw[i]+= 1;
+				length[i] = 0.001;
+			}
+		}
+	}
+	*/
 
-	/*if (elapsedTime - lastElapsedTime > 2000 && depth < EXPANSIONS_NUMBER-1) {
-		depth++;
-		lastElapsedTime = elapsedTime;
-		cout << "a\n";
-
-	}*/
-
-	//elapsedTime = elapsedTime / 5000;
-	//float t = (sin((elapsedTime*PI - PI / 2)) + 1) / 2;
-	//float p = (1 - t)*STARTX + t*ENDX;
-
-	//if (cam) eyeX = p;
 	glutPostRedisplay();
 
 }
@@ -339,14 +312,7 @@ void keyboard(unsigned char key, int x, int y){
 		break;
 
 	case 'r':
-		depth = 0;
-		stage = 0;
-		//eyeX = 30;
-		//eyeY = 40;
-		//lastTime = 0;
-		//lastElapsedTime = 0;
-		//length = 0.001;
-		//length2 = 0;
+		//stage = 0;
 
 		break;
 
@@ -372,10 +338,9 @@ void glutMain(int argc, char** argv) {
 	glutIdleFunc(animate);
 
 
-	for (int i = 0; i < EXPANSIONS_NUMBER; i++) {
-		length[i] = 0.001;
-		lineWidth[i] = (float)(i - (0.5 * i));
-	}
+	
+
+	
 
 	glutMainLoop();
 }
@@ -433,14 +398,20 @@ int main(int argc, char** argv) {
 
 	degree = parser.getDegree();
 
-	string expanded;
-	stages = new vector<string>();
+	
+
+	expanded = parser.expand(EXPANSIONS_NUMBER);
+	printf("\nExpanded %d times resulted in:\n%s\n\n", EXPANSIONS_NUMBER, expanded.data());
+
 	for (int i = 0; i < EXPANSIONS_NUMBER; i++) {
-		expanded = parser.expand(i+1);
-		stages->push_back(expanded);
-		//printf("Expanded %d times resulted in:\n%s\n\n\n", i, stages->at(i).data());
-		
+		length[i] = 0.001;
+		lineWidth[i] = (float)(EXPANSIONS_NUMBER - (0.5 * i));
+		linesNumber[i] = 0;
+		linesToDraw[i] = 0;
+		lastDrawn[i] = 0;
+		//printf("for i = %d, length: %f. lineWidth = %f\n", i, length[i], lineWidth[i]);
 	}
+	linesToDraw[0] = 1;
 
 	glutMain(argc, argv);
 
