@@ -8,7 +8,7 @@
 #include "Parser.h"
 
 #define PI 3.1415
-#define EXPANSIONS_NUMBER 3
+#define EXPANSIONS_NUMBER 4
 
 using namespace std;
 
@@ -84,7 +84,7 @@ void drawLine() {
 
 	//glLineWidth(lineWidth[stage] - (linesNumber[stage] * 0.001));
 	glLineWidth(1);
-	/*
+	
 	if (linesNumber[stage] <= linesToDraw[stage] && linesNumber[stage] > lastDrawn[stage]) {
 		glBegin(GL_LINES);
 		glVertex3f(0, 0, 0);
@@ -100,8 +100,8 @@ void drawLine() {
 		glEnd();
 		glTranslatef(0, 1, 0);
 	}
-	*/
-
+	
+	/*
 	if (getTotalLines() <= linesToDraw[0]) {
 		glBegin(GL_LINES);
 		glVertex3f(0, 0, 0);
@@ -117,7 +117,7 @@ void drawLine() {
 		glTranslatef(0, length[0], 0);
 	}
 
-
+	*/
 
 	glPopAttrib();
 }
@@ -238,7 +238,7 @@ void animate() {
 
 	// TODO: Change the angle to make it blow in the wind
 
-
+	/*
 	if (length[0] < 1) {
 		length[0] += 0.01;
 		lineWidth[0] += 0.01;
@@ -248,10 +248,10 @@ void animate() {
 		linesToDraw[0] += 1;
 		//printf("lines do draw: %d    Lines Number: %d\n", linesToDraw[0], linesNumber[0]);
 		length[0] = 0.001;
-	}
-	/*
+	}*/
+	
 	if (length[0] < 1) {
-		length[0] += 0.01;
+		length[0] += 0.05;
 		lineWidth[0] += 0.01;
 	}
 	else {
@@ -263,19 +263,19 @@ void animate() {
 
 	
 	for (int i = 1; i < EXPANSIONS_NUMBER; i++) {
-		if (lastDrawn[i - 1] > 10*i) {
+		if (lastDrawn[i - 1] > 10) {
 			if (length[i] < 1) {
-				length[i] += 0.01;
+				length[i] += 0.05;
 				lineWidth[i] += 0.01;
 			}
 			else {
 				lastDrawn[i] = linesToDraw[i];
-				linesToDraw[i]+= 1;
+				linesToDraw[i]+= 2;
 				length[i] = 0.001;
 			}
 		}
 	}
-	*/
+	
 
 	glutPostRedisplay();
 
