@@ -2,6 +2,8 @@
 #include<iostream>
 #include <list>
 
+#include "ProductionRule.h"
+
 #define PARSER_DONE 0
 #define PARSER_FILE_NOT_FOUND 100
 #define PARSER_SYNTAX_ERROR 101
@@ -15,16 +17,7 @@
 
 using namespace std;
 
-class ProductionRule {
-	char target;
-	char * result;
 
-public:
-	ProductionRule(char target, char* result);
-	char getTarget();
-	char* getResult();
-	//int separateProdRule(char * rule);
-};
 
 class Parser {
 	string file;
