@@ -1,22 +1,8 @@
 ﻿  Main.cpp
-  Parser.cpp
-Parser.cpp(38): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
-Parser.cpp(162): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
-Parser.cpp(254): warning C4018: '<': signed/unsigned mismatch
-Parser.cpp(314): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
-Parser.cpp(324): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
-  Tree.cpp
-c:\users\rafael\documents\github\l-systems\l-systems\Tree.h(22): error C2059: syntax error: '}'
-c:\users\rafael\documents\github\l-systems\l-systems\Tree.h(22): error C2143: syntax error: missing ';' before '}'
-c:\users\rafael\documents\github\l-systems\l-systems\Tree.h(22): error C2238: unexpected token(s) preceding ';'
-c:\users\rafael\documents\github\l-systems\l-systems\Tree.h(29): error C2065: 'ProductionRule': undeclared identifier
-c:\users\rafael\documents\github\l-systems\l-systems\Tree.h(29): error C2923: 'std::list': 'ProductionRule' is not a valid template type argument for parameter '_Ty'
-c:\users\rafael\documents\github\l-systems\l-systems\Tree.h(29): error C3203: 'allocator': unspecialized class template can't be used as a template argument for template parameter '_Alloc', expected a real type
-c:\users\rafael\documents\github\l-systems\l-systems\Tree.h(38): error C2065: 'ProductionRule': undeclared identifier
-c:\users\rafael\documents\github\l-systems\l-systems\Tree.h(38): error C2923: 'std::list': 'ProductionRule' is not a valid template type argument for parameter '_Ty'
-c:\users\rafael\documents\github\l-systems\l-systems\Tree.h(38): error C3203: 'allocator': unspecialized class template can't be used as a template argument for template parameter '_Alloc', expected a real type
-c:\users\rafael\documents\github\l-systems\l-systems\Tree.h(49): warning C4624: 'Parser': destructor was implicitly defined as deleted
+  Generating code
+  7 of 224 functions ( 3.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  L-Systems.vcxproj -> C:\Users\Rafael\Documents\GitHub\L-Systems\Release\L-Systems.exe
+  L-Systems.vcxproj -> C:\Users\Rafael\Documents\GitHub\L-Systems\Release\L-Systems.pdb (Full PDB)

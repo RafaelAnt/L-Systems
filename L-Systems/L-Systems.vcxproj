@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\toolkits\glut-3.7\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\toolkits\glut-3.7\include;$(IncludePath);C:\boost_1_62_0</IncludePath>
     <LibraryPath>C:\toolkits\glut-3.7\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -79,7 +79,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\toolkits\glut\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\toolkits\glut\include;$(IncludePath);C:\boost_1_62_0</IncludePath>
     <LibraryPath>C:\toolkits\glut\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -150,13 +150,13 @@
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ProductionRule.cpp" />
     <ClCompile Include="Tree.cpp" />
-    <ClCompile Include="TreeBranch.cpp" />
+    <ClCompile Include="TreeNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Parser.h" />
     <ClInclude Include="ProductionRule.h" />
     <ClInclude Include="Tree.h" />
-    <ClInclude Include="TreeBranch.h" />
+    <ClInclude Include="TreeNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -27,7 +27,7 @@
     <ClCompile Include="ProductionRule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TreeBranch.cpp">
+    <ClCompile Include="TreeNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,7 +41,7 @@
     <ClInclude Include="ProductionRule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TreeBranch.h">
+    <ClInclude Include="TreeNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

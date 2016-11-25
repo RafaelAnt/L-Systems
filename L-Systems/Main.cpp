@@ -6,9 +6,10 @@
 #include <time.h>
 
 #include "Parser.h"
+#include "TreeBranch.h"
 
 #define PI 3.1415
-#define EXPANSIONS_NUMBER 4
+#define EXPANSIONS_NUMBER 1
 
 using namespace std;
 
@@ -38,7 +39,7 @@ string expanded;
 
 void push() {
 	stage++;
-	glPushMatrix();
+	glPushMatrix();	
 }
 
 void pop() {
