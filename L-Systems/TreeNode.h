@@ -15,6 +15,7 @@ class TreeNode {
 	float length;
 	int stage;
 	list<TreeNode> nodes;
+	TreeNode *father;
 	float color[3];
 	clock_t created;
 	float angle;

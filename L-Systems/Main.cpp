@@ -6,7 +6,7 @@
 #include <time.h>
 
 #include "Parser.h"
-#include "TreeBranch.h"
+#include "TreeNode.h"
 
 #define PI 3.1415
 #define EXPANSIONS_NUMBER 1
