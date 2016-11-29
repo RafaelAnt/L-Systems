@@ -2,12 +2,12 @@
 #include <iostream>
 #include <list>
 #include <time.h>
-//#include <boost/any.hpp>
+
 
 using namespace std;
 
-#define TREE_BRANCH_DONE 300
-#define TREE_BRANCH_INVALID_VALUE 301
+#define TREE_NODE_DONE 300
+#define TREE_NODE_INVALID_VALUE 301
 
 class TreeNode {
 	char type;
@@ -22,7 +22,7 @@ class TreeNode {
 
 public:
 	TreeNode();
-	TreeNode(char type);
+	TreeNode(char type, TreeNode* father);
 	TreeNode(const TreeNode& node);
 
 	char getType();
@@ -31,12 +31,14 @@ public:
 	float getLength();
 	int setLength(float newLength);
 	int getStage();
-	int setStage();
+	int setStage(int newStage);
 	clock_t getCreated();
 	float getAngle();
-	void setAngle(float angle);
+	void setAngle(float newAngle);
 	list<TreeNode> getNodes();
 	void addNode(TreeNode node);
+	TreeNode* getFather();
+	int setFather(TreeNode *newFather);
 
 	int grow(string prodRule);
 
