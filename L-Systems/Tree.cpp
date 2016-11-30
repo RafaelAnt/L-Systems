@@ -3,7 +3,17 @@
 
 #include "Tree.h"
 
+Tree::Tree(){
+	//printf("Usei o mau\n");
+	start = TreeNode();
+	maxLength = -1;
+	maxWidth = -1;
+	lengthGrowthRate = -1;
+	widthGrowthRate = -1;
+}
+
 Tree::Tree(string axiom, list<ProductionRule> prods,float maxLength, float maxWidth, float lengthGrowthRate, float widthGrowthRate){
+	//printf("Usei o bom\n");
 	productionRules = list<ProductionRule>(prods);
 	this->maxLength = maxLength;
 	this->maxWidth = maxWidth;
@@ -12,24 +22,26 @@ Tree::Tree(string axiom, list<ProductionRule> prods,float maxLength, float maxWi
 
 
 	char ch = axiom.at(0);
-	start = TreeNode(ch,nullptr);
-	TreeNode last = start;
-
+	
+	start = TreeNode(ch, nullptr);
+	TreeNode *last = &start;
+	//printf("char do start:     \'%c\'\n", start.getType());
 	for (int j = 1; j < axiom.length(); j++) {
 		ch = axiom.at(j);
-		TreeNode aux = TreeNode(ch, &last);
-		last.addNode(aux);
-		last = aux;
+		TreeNode aux (ch, last);
+		//printf("char do Treenode:     \'%c\'\n", aux.getType());
+		last->addNode(aux);
+		last = &aux;
 	}
-	
+
 }
 
-TreeNode* Tree::getStart(){
+TreeNode Tree::getStart(){
 	return start;
 }
 
-int Tree::setStart(TreeNode* start){
-	if(start==nullptr) return TREE_INVALID_VALUE;
+int Tree::setStart(TreeNode start){
+	//if(start==nullptr) return TREE_INVALID_VALUE;
 	this->start = start;
 	return TREE_DONE;
 }
@@ -72,5 +84,9 @@ int Tree::setWidthGrowthRate(float rate){
 	if (rate <= 0) return TREE_INVALID_VALUE;
 	this->widthGrowthRate = rate;
 	return TREE_DONE;
+}
+
+string Tree::getLSystem(){
+	return start.getLSystem();
 }
 

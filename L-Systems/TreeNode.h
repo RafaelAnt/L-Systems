@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <stdio.h>
 #include <list>
 #include <time.h>
 
@@ -40,6 +41,8 @@ public:
 	TreeNode* getFather();
 	int setFather(TreeNode *newFather);
 
+	int branch(char ch);
 	int grow(string prodRule);
+	string getLSystem();
 
 };

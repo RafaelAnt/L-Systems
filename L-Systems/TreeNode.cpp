@@ -1,6 +1,3 @@
-#include <iostream>
-#include <stdio.h>
-
 #include "TreeNode.h"
 
 
@@ -83,7 +80,7 @@ int TreeNode::setStage(int newStage){
 	if (newStage < 0) {
 		return TREE_NODE_INVALID_VALUE;
 	}
-	length = newStage;
+	stage = newStage;
 	return TREE_NODE_DONE;
 }
 
@@ -115,5 +112,31 @@ int TreeNode::setFather(TreeNode * newFather){
 	if (newFather = nullptr) return TREE_NODE_INVALID_VALUE;
 	this->father = newFather;
 	return TREE_NODE_DONE;
+}
+
+string TreeNode::getLSystem(){
+	//printf("teste\n");
+	list<TreeNode>::iterator it;
+
+	string r;
+	r += type;
+	if (nodes.size() == 0) {
+		return r;
+	}
+	if (nodes.size() == 1) {
+		it = nodes.begin();
+		TreeNode aux = *it;
+		r += aux.getLSystem();
+	}
+	else {
+		for (it = nodes.begin(); it != nodes.end(); it++) {
+			r += '[';
+			TreeNode aux = *it;
+			r += aux.getLSystem();
+			r += ']';
+		}
+	}
+
+	return r;
 }
 

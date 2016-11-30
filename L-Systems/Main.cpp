@@ -7,6 +7,7 @@
 
 #include "Parser.h"
 #include "TreeNode.h"
+#include "Tree.h"
 
 #define PI 3.1415
 #define EXPANSIONS_NUMBER 1
@@ -35,6 +36,7 @@ int stage = 0;
 int speed = 0.01;
 
 string expanded;
+Tree plant;
 //vector<string> *stages = new vector<string>();
 
 void push() {
@@ -399,11 +401,14 @@ int main(int argc, char** argv) {
 
 	degree = parser.getDegree();
 
-	
+	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1, 1, 0.1, 0.1);
+	string aux = plant.getLSystem();
 
+	printf("\nLSystem: \"%s\"\n", aux.data());
+
+	/* OLD CODE
 	expanded = parser.expand(EXPANSIONS_NUMBER);
 	printf("\nExpanded %d times resulted in:\n%s\n\n", EXPANSIONS_NUMBER, expanded.data());
-
 	for (int i = 0; i < EXPANSIONS_NUMBER; i++) {
 		length[i] = 0.001;
 		lineWidth[i] = (float)(EXPANSIONS_NUMBER - (0.5 * i));
@@ -413,9 +418,9 @@ int main(int argc, char** argv) {
 		//printf("for i = %d, length: %f. lineWidth = %f\n", i, length[i], lineWidth[i]);
 	}
 	linesToDraw[0] = 1;
-
+	*/
 	glutMain(argc, argv);
-
+	
 	//system("pause");
 	printf("\nThe End!\n");
 	return 0;

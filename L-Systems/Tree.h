@@ -13,17 +13,18 @@ using namespace std;
 
 class Tree {
 	list<ProductionRule> productionRules;
-	TreeNode *start;
+	TreeNode start;
 	float maxLength;
 	float maxWidth;
 	float lengthGrowthRate;
 	float widthGrowthRate;
 
 public:
+	Tree();
 	Tree(string axiom, list<ProductionRule> prods, float maxLength, float maxWidth, float lengthGrowthRate, float widthGrowthRate);
 
-	TreeNode* getStart();
-	int setStart(TreeNode* start);
+	TreeNode getStart();
+	int setStart(TreeNode start);
 	float getMaxLength();
 	int setMaxLength(float length);
 	float getMaxWidth();
@@ -33,4 +34,5 @@ public:
 	float getWidthGrowthRate();
 	int setWidthGrowthRate(float rate);
 
+	string getLSystem();
 };
