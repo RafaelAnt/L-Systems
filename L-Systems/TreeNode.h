@@ -4,11 +4,13 @@
 #include <list>
 #include <time.h>
 
+#include "ProductionRule.h"
 
 using namespace std;
 
 #define TREE_NODE_DONE 300
 #define TREE_NODE_INVALID_VALUE 301
+#define TREE_NODE_INVALID_PRODUCTION_RULE 302
 
 class TreeNode {
 	char type;
@@ -42,7 +44,7 @@ public:
 	int setFather(TreeNode *newFather);
 
 	int branch(char ch);
-	int grow(string prodRule);
+	int grow(ProductionRule prodRule);
 	string getLSystem();
 
 };

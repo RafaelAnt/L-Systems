@@ -1,15 +1,16 @@
 #pragma once
-#include<iostream>
+#include <iostream>
+#include <stdio.h>
 
 using namespace std;
 
 class ProductionRule {
 	char target;
-	char * result;
+	string result;
 
 public:
 	ProductionRule(char target, char* result);
 	char getTarget();
-	char* getResult();
+	string getResult();
 	//int separateProdRule(char * rule);
 };

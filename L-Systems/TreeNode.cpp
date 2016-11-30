@@ -114,6 +114,16 @@ int TreeNode::setFather(TreeNode * newFather){
 	return TREE_NODE_DONE;
 }
 
+int TreeNode::grow(ProductionRule prodRule){
+	if (prodRule.getTarget() != type) return TREE_NODE_INVALID_PRODUCTION_RULE;
+
+	for (int i = 0; i < prodRule.getResult().length(); i++) {
+
+	}
+
+	return TREE_NODE_DONE;
+}
+
 string TreeNode::getLSystem(){
 	//printf("teste\n");
 	list<TreeNode>::iterator it;

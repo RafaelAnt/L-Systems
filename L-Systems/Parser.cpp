@@ -1,6 +1,3 @@
-#include <iostream>
-#include <stdio.h>
-
 #include "Parser.h"
 
 #define LINE_MAX 500
@@ -9,9 +6,9 @@
 #define SAVE_TO_PRODUCTION_RULES 202
 #define SAVE_TO_END 203
 
-#define TYPE_AXIOM 300
-#define TYPE_DEGREE 301
-#define TYPE_PRODUCTION 302
+#define TYPE_AXIOM 204
+#define TYPE_DEGREE 205
+#define TYPE_PRODUCTION 206
 
 
 Parser::Parser() {
@@ -233,7 +230,7 @@ void Parser::printGrammar(){
 
 	for (it = productionRules.begin(); it != productionRules.end(); it++) {
 		ProductionRule aux = *it;
-		printf("PRODUTION RULE:\n\tTarget: %c\n\tResult: %s\n", aux.getTarget(), aux.getResult());
+		printf("PRODUTION RULE:\n\tTarget: %c\n\tResult: %s\n", aux.getTarget(), aux.getResult().data());
 	}
 }
 
@@ -261,7 +258,7 @@ string Parser::expand(int n){
 					result.replace(j, 1, aux.getResult());
 					//printf("\t\tSubstituido por %s\n", aux.getResult());
 					//printf("\t\t\tTamanho: %d\n\t\t\tAte agora esta: %s\n", result.length(), result.data());
-					j = j + (strlen(aux.getResult()) - 1);
+					j = j + (aux.getResult().length() - 1);
 					break;
 				}
 			}

@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <list>
+#include <stdio.h>
 
 #include "ProductionRule.h"
 #include "TreeNode.h"
