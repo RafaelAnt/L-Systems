@@ -1,8 +1,9 @@
-﻿  TreeNode.cpp
+﻿  Tree.cpp
+Tree.cpp(27): warning C4018: '<': signed/unsigned mismatch
   Generating code
-  3 of 439 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
+  1 of 442 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    4 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   L-Systems.vcxproj -> C:\Users\Rafael\Documents\GitHub\L-Systems\Release\L-Systems.exe
   L-Systems.vcxproj -> C:\Users\Rafael\Documents\GitHub\L-Systems\Release\L-Systems.pdb (Full PDB)

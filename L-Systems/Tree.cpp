@@ -85,20 +85,45 @@ int Tree::setWidthGrowthRate(float rate){
 }
 
 int Tree::grow(int number){
-
+	int r;
 	for (int i = 0; i < number; i++) {
-		start.grow(productionRules, angle);
+		r=start.grow(productionRules, angle);
+		if (r != TREE_NODE_DONE) {
+			return r;
+		}
 	}
 
 	return TREE_DONE;
 }
 
 string Tree::getLSystem(){
-	/*TreeNode filho = *start.getNodes().begin();
+	TreeNode filho = *start.getNodes().begin();
 	printf("good so far\n");
-	TreeNode *father = filho.getFather();
+	//TreeNode neto = *filho.getNodes().begin();
 	printf("good so far\n");
-	printf("Start: %c\nFilho: %c\n Start: %c (atravez do filho)\n", start.getType(), filho.getType(), father->getType());*/
+
+	//printf("Start: %c\nFilho: %c\n Neto1: %c \n", start.getType(), filho.getType(), neto.getType());
 	return start.getLSystem();
+}
+
+void Tree::teste(){
+	printf("\n\n\nTESTE\n\nNumero de filhos:\n");
+
+	TreeNode aux = start;
+	int s;
+
+	while (true){
+		s = aux.getNodes().size();
+		printf("\t%d\n", s);
+		if (s == 0) {
+			
+			break;
+		}
+		else {
+			aux = *aux.getNodes().begin();
+		}
+	}
+	
+
 }
 

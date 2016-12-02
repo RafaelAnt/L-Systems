@@ -38,4 +38,5 @@ public:
 
 	int grow(int number);
 	string getLSystem();
+	void teste();
 };

@@ -27,6 +27,7 @@ class TreeNode {
 public:
 	TreeNode();
 	TreeNode(char type, TreeNode* father);
+	TreeNode(char type, TreeNode* father, float angle);
 	TreeNode(const TreeNode& node);
 
 	char getType();

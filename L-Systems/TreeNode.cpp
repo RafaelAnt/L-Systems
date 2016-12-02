@@ -30,6 +30,20 @@ TreeNode::TreeNode(char type, TreeNode* father){
 	this->father = father;
 }
 
+TreeNode::TreeNode(char type, TreeNode * father, float angle){
+	this->type = type;
+	width = 1;
+	length = 0;
+	stage = 1;
+	nodes = list<TreeNode>();
+	color[0] = 0;
+	color[1] = 1;
+	color[3] = 0;
+	created = clock();
+	this->angle = angle;
+	this->father = father;
+}
+
 TreeNode::TreeNode(const TreeNode &node) {
 	this->type = node.type;
 	this->width = node.width;
@@ -121,6 +135,7 @@ int TreeNode::grow(list<ProductionRule> prodRule, float angleChange){
 	list<TreeNode> old;
 	string result;
 	TreeNode aux;
+	TreeNode aux2;
 	TreeNode* current = this;
 	TreeNode* goBackTo = this;
 	float angleMod = angle;
@@ -158,10 +173,11 @@ int TreeNode::grow(list<ProductionRule> prodRule, float angleChange){
 		char c = *sIt;
 		switch (c){
 		case 'F':
-			printf("\t\tF\n");
-			aux = TreeNode ('F', current);
-			aux.setAngle(angleMod);
+			
+			aux = TreeNode ('F', current, angleMod);
 			current->addNode(aux);
+			aux2 = *current->getNodes().begin(); // é o aux1
+			printf("\t\tF\t\tAdicionado novo F ao current: angulo: %f, angulo atravez do current: %f \n", aux.getAngle(), aux2.getAngle());
 			current = &aux;
 			break;
 

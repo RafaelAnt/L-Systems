@@ -405,10 +405,15 @@ int main(int argc, char** argv) {
 	degree = parser.getDegree();
 
 	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1, 1, 0.1, 0.1, degree);
-	plant.grow(1);
-	string aux = plant.getLSystem();
 
+	if (plant.grow(1) != TREE_DONE) {
+		printf("ERRO A CRESCER!!!!\n");
+	}
+
+	string aux = plant.getLSystem();
 	printf("\nLSystem: \"%s\"\n", aux.data());
+
+	plant.teste();
 
 	/* OLD CODE
 	expanded = parser.expand(EXPANSIONS_NUMBER);
