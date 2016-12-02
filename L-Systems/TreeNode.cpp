@@ -114,12 +114,92 @@ int TreeNode::setFather(TreeNode * newFather){
 	return TREE_NODE_DONE;
 }
 
-int TreeNode::grow(ProductionRule prodRule){
-	if (prodRule.getTarget() != type) return TREE_NODE_INVALID_PRODUCTION_RULE;
+int TreeNode::grow(list<ProductionRule> prodRule, float angleChange){
+	list<ProductionRule>::iterator it;
+	list<TreeNode>::iterator tnIt;
+	string::iterator sIt;
+	list<TreeNode> old;
+	string result;
+	TreeNode aux;
+	TreeNode* current = this;
+	TreeNode* goBackTo = this;
+	float angleMod = angle;
 
-	for (int i = 0; i < prodRule.getResult().length(); i++) {
+	printf("Growing %c...\n", type);
 
+	if (!this->nodes.empty()) {
+		printf("\tSaving old nodes...\n");
+		old = list<TreeNode> (this->nodes);
+		this->nodes.clear();
 	}
+
+	printf("\tFinding Production Rule...\n");
+	for (it = prodRule.begin(); it != prodRule.end(); it++) {
+		ProductionRule aux = *it;
+		if (aux.getTarget() == this->type) {
+			result = aux.getResult();
+		}
+	}
+
+	if (result.size() == 0) {
+		return TREE_NODE_INVALID_PRODUCTION_RULE;
+	}
+	else {
+		printf("\tFound.\n");
+	}
+	
+	if (result.at(0) != this->type) {
+		printf("\tChanging my type to %c...\n", type);
+		this->type = result.at(0);
+	}
+
+	printf("\tGrowth started...\n");
+	for (sIt = result.begin() + 1; sIt != result.end(); sIt++) {
+		char c = *sIt;
+		switch (c){
+		case 'F':
+			printf("\t\tF\n");
+			aux = TreeNode ('F', current);
+			aux.setAngle(angleMod);
+			current->addNode(aux);
+			current = &aux;
+			break;
+
+		case '+':
+			
+			angleMod += angleChange;
+			printf("\t\t+\t\tNew Angle: %f\n",angleMod);
+			break;
+
+		case '-':
+			angleMod -= angleChange;
+			printf("\t\t-\t\tNew Angle: %f\n", angleMod);
+			break;
+			
+		case '[':
+			printf("\t\t[\n");
+			goBackTo = current;
+			break;
+
+		case ']':
+			printf("\t\t]\n");
+			current = goBackTo;
+			break;
+
+		default:
+			return TREE_NODE_UNDIFINED_SYMBOL;
+		}
+	}
+
+	printf("\tLoading old nodes...\n");
+	for (tnIt = old.begin(); tnIt != old.end(); tnIt++) {
+		aux = *tnIt;
+		aux.setAngle(aux.getAngle() + angleMod);
+		aux.grow(prodRule, angleChange);
+		current->addNode(aux);
+	}
+	//printf("\tComplete...\n");
+	
 
 	return TREE_NODE_DONE;
 }
@@ -130,21 +210,23 @@ string TreeNode::getLSystem(){
 
 	string r;
 	r += type;
+
 	if (nodes.size() == 0) {
 		return r;
 	}
+
 	if (nodes.size() == 1) {
 		it = nodes.begin();
 		TreeNode aux = *it;
 		r += aux.getLSystem();
 	}
 	else {
+		r += '[';
 		for (it = nodes.begin(); it != nodes.end(); it++) {
-			r += '[';
 			TreeNode aux = *it;
 			r += aux.getLSystem();
-			r += ']';
 		}
+		r += ']';
 	}
 
 	return r;

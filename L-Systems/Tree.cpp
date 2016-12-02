@@ -9,13 +9,14 @@ Tree::Tree(){
 	widthGrowthRate = -1;
 }
 
-Tree::Tree(string axiom, list<ProductionRule> prods,float maxLength, float maxWidth, float lengthGrowthRate, float widthGrowthRate){
+Tree::Tree(string axiom, list<ProductionRule> prods,float maxLength, float maxWidth, float lengthGrowthRate, float widthGrowthRate, float angle){
 	//printf("Usei o bom\n");
 	productionRules = list<ProductionRule>(prods);
 	this->maxLength = maxLength;
 	this->maxWidth = maxWidth;
 	this->lengthGrowthRate = lengthGrowthRate;
 	this->widthGrowthRate = widthGrowthRate;
+	this->angle = angle;
 
 
 	char ch = axiom.at(0);
@@ -83,7 +84,21 @@ int Tree::setWidthGrowthRate(float rate){
 	return TREE_DONE;
 }
 
+int Tree::grow(int number){
+
+	for (int i = 0; i < number; i++) {
+		start.grow(productionRules, angle);
+	}
+
+	return TREE_DONE;
+}
+
 string Tree::getLSystem(){
+	/*TreeNode filho = *start.getNodes().begin();
+	printf("good so far\n");
+	TreeNode *father = filho.getFather();
+	printf("good so far\n");
+	printf("Start: %c\nFilho: %c\n Start: %c (atravez do filho)\n", start.getType(), filho.getType(), father->getType());*/
 	return start.getLSystem();
 }
 

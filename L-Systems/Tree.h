@@ -19,10 +19,11 @@ class Tree {
 	float maxWidth;
 	float lengthGrowthRate;
 	float widthGrowthRate;
+	float angle;
 
 public:
 	Tree();
-	Tree(string axiom, list<ProductionRule> prods, float maxLength, float maxWidth, float lengthGrowthRate, float widthGrowthRate);
+	Tree(string axiom, list<ProductionRule> prods, float maxLength, float maxWidth, float lengthGrowthRate, float widthGrowthRate, float angle);
 
 	TreeNode getStart();
 	int setStart(TreeNode start);
@@ -35,5 +36,6 @@ public:
 	float getWidthGrowthRate();
 	int setWidthGrowthRate(float rate);
 
+	int grow(int number);
 	string getLSystem();
 };

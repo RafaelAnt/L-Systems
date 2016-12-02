@@ -32,8 +32,8 @@ float lookX = 0;
 float lookY = 30;
 float lookZ = 0;
 
-int stage = 0;
-int speed = 0.01;
+int growNumber = 1;
+int stage=0;
 
 string expanded;
 Tree plant;
@@ -315,8 +315,11 @@ void keyboard(unsigned char key, int x, int y){
 		break;
 
 	case 'r':
+		printf("Restarting Animation...\n");
 		//stage = 0;
-
+	case'g':
+		printf("Increasing growth...");
+		plant.grow(1);
 		break;
 
 	default:
@@ -401,7 +404,8 @@ int main(int argc, char** argv) {
 
 	degree = parser.getDegree();
 
-	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1, 1, 0.1, 0.1);
+	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1, 1, 0.1, 0.1, degree);
+	plant.grow(1);
 	string aux = plant.getLSystem();
 
 	printf("\nLSystem: \"%s\"\n", aux.data());
