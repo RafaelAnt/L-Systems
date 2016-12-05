@@ -20,15 +20,15 @@ Tree::Tree(string axiom, list<ProductionRule> prods,float maxLength, float maxWi
 
 
 	char ch = axiom.at(0);
-	
 	start = TreeNode(ch, nullptr);
+
 	TreeNode *last = &start;
 	//printf("char do start:     \'%c\'\n", start.getType());
-	for (int j = 1; j < axiom.length(); j++) {
+	for (unsigned int j = 1; j < axiom.length(); j++) {
 		ch = axiom.at(j);
 		TreeNode aux (ch, last);
 		//printf("char do Treenode:     \'%c\'\n", aux.getType());
-		last->addNode(aux);
+		last->addNode(&aux);
 		last = &aux;
 	}
 
@@ -97,10 +97,10 @@ int Tree::grow(int number){
 }
 
 string Tree::getLSystem(){
-	TreeNode filho = *start.getNodes().begin();
-	printf("good so far\n");
+	//TreeNode filho = *start.getNodes().begin();
+	//printf("good so far\n");
 	//TreeNode neto = *filho.getNodes().begin();
-	printf("good so far\n");
+	//printf("good so far\n");
 
 	//printf("Start: %c\nFilho: %c\n Neto1: %c \n", start.getType(), filho.getType(), neto.getType());
 	return start.getLSystem();
@@ -109,18 +109,18 @@ string Tree::getLSystem(){
 void Tree::teste(){
 	printf("\n\n\nTESTE\n\nNumero de filhos:\n");
 
-	TreeNode aux = start;
+	TreeNode *aux = &start;
 	int s;
 
 	while (true){
-		s = aux.getNodes().size();
+		s = aux->getNodes().size();
 		printf("\t%d\n", s);
 		if (s == 0) {
 			
 			break;
 		}
 		else {
-			aux = *aux.getNodes().begin();
+			aux = *aux->getNodes().begin();
 		}
 	}
 	

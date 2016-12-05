@@ -8,6 +8,7 @@
 #include "Parser.h"
 #include "TreeNode.h"
 #include "Tree.h"
+#include "Main.h"
 
 #define PI 3.1415
 #define EXPANSIONS_NUMBER 4
@@ -406,8 +407,60 @@ int main(int argc, char** argv) {
 
 	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1, 1, 0.1, 0.1, degree);
 
-	if (plant.grow(1) != TREE_DONE) {
-		printf("ERRO A CRESCER!!!!\n");
+	/*TreeNode start = plant.getStart();
+	TreeNode aux1 ('A', &start, 0);
+	TreeNode aux2 ('B', &start, 0);
+	TreeNode aux3 ('C', &start, 0);
+	TreeNode aux4 ('D', &start, 0);
+
+	
+	
+	
+	aux3.addNode(aux4);
+	aux2.addNode(aux3);
+	aux1.addNode(aux2);
+	start.addNode(aux1);
+
+	TreeNode uio = *start.getNodes().begin();
+	char c = uio.getType();
+	printf("\n\nMEGA TESTE:\tLetra: %c\n", c);
+
+	if (uio.getNodes().empty()) {
+		printf("tá vazia\n");
+	}
+
+	aux1 = *uio.getNodes().begin();
+	if (&aux1 == nullptr) {
+		printf("é null\n");
+	}
+	c = aux1.getType();
+	printf("MEGA TESTE:\tLetra: %c\n", c);
+
+	uio = *aux1.getNodes().begin();
+	c = uio.getType();
+	printf("MEGA TESTE:\tLetra: %c\n", c);*/
+
+
+
+	/*string aux = plant.getLSystem();
+	printf("\nLSystem: \"%s\"\n\n", aux.data());
+	plant.teste();
+	printf("\n\n");*/
+	
+	r = plant.grow(1);
+	if (r != TREE_DONE) {
+		switch (r){
+		case (TREE_NODE_INVALID_PRODUCTION_RULE):
+			printf("TREE_NODE_INVALID_PRODUCTION_RULE!!!!\n");
+			break;
+		case (TREE_NODE_UNDIFINED_SYMBOL):
+			printf("TREE_NODE_UNDIFINED_SYMBOL!!!!\n");
+			break;
+		default:
+			printf("ERRO A CRESCER!!!!\n");
+			break;
+		}
+		
 	}
 
 	string aux = plant.getLSystem();

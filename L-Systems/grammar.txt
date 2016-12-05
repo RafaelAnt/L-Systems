@@ -1,6 +1,15 @@
 % No BLANK Spaces Allowed!!!
 
 #AXIOM
+F
+#DEGREES
+30
+#PRODUCTION
+F=FFF
+#END
+
+
+#AXIOM
 FX
 #DEGREES
 25

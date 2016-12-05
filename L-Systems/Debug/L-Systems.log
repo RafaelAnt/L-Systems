@@ -1,3 +1,4 @@
-﻿  Main.cpp
+﻿  TreeNode.cpp
+c:\users\rafael\documents\github\l-systems\l-systems\treenode.cpp(138): warning C4101: 'aux2': unreferenced local variable
   L-Systems.vcxproj -> C:\Users\Rafael\Documents\GitHub\L-Systems\Debug\L-Systems.exe
   L-Systems.vcxproj -> C:\Users\Rafael\Documents\GitHub\L-Systems\Debug\L-Systems.pdb (Full PDB)

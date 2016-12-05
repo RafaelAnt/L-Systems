@@ -71,16 +71,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\toolkits\glut-3.7\include;$(IncludePath);C:\boost_1_62_0</IncludePath>
-    <LibraryPath>C:\toolkits\glut-3.7\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\toolkits\glut-3.7\include;$(IncludePath);C:\boost_1_62_0;C:\toolkits\glut\include</IncludePath>
+    <LibraryPath>C:\toolkits\glut\lib;C:\toolkits\glut-3.7\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\toolkits\glut\include;$(IncludePath);C:\boost_1_62_0</IncludePath>
-    <LibraryPath>C:\toolkits\glut\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\toolkits\glut\include;$(IncludePath);C:\boost_1_62_0;C:\toolkits\glut\include</IncludePath>
+    <LibraryPath>C:\toolkits\glut\lib;C:\toolkits\glut\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -153,6 +153,7 @@
     <ClCompile Include="TreeNode.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Main.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="ProductionRule.h" />
     <ClInclude Include="Tree.h" />
