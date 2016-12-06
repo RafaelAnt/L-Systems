@@ -18,7 +18,7 @@ class TreeNode {
 	float width;
 	float length;
 	int stage;
-	list<TreeNode*> nodes;
+	list<TreeNode> nodes;
 	TreeNode *father;
 	float color[3];
 	clock_t created;
@@ -28,7 +28,7 @@ public:
 	TreeNode();
 	TreeNode(char type, TreeNode* father);
 	TreeNode(char type, TreeNode* father, float angle);
-	TreeNode(const TreeNode& node);
+	TreeNode(const TreeNode & node);
 
 	char getType();
 	float getWidth();
@@ -40,7 +40,7 @@ public:
 	clock_t getCreated();
 	float getAngle();
 	void setAngle(float newAngle);
-	list<TreeNode*> getNodes();
+	list<TreeNode>* getNodes();
 	void addNode(TreeNode* node);
 	TreeNode* getFather();
 	int setFather(TreeNode *newFather);

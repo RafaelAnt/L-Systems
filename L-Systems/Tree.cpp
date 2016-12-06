@@ -109,18 +109,27 @@ string Tree::getLSystem(){
 void Tree::teste(){
 	printf("\n\n\nTESTE\n\nNumero de filhos:\n");
 
-	TreeNode *aux = &start;
+	
+	TreeNode aux = start;
+	list<TreeNode>* qq;
 	int s;
 
 	while (true){
-		s = aux->getNodes().size();
+		
+		//printf("1 passo: %c\n", aux->getType());
+		qq = aux.getNodes();
+		//printf("Passei o 2 passo\n");
+		s = qq->size();
+			
 		printf("\t%d\n", s);
 		if (s == 0) {
-			
 			break;
 		}
 		else {
-			aux = *aux->getNodes().begin();
+			//printf("Aux antes:  %x\n", aux);
+			aux = *aux.getNodes()->begin();
+			//if (aux == nullptr) 
+			//printf("Aux:  %x\n",aux);
 		}
 	}
 	

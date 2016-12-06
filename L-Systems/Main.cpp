@@ -462,11 +462,12 @@ int main(int argc, char** argv) {
 		}
 		
 	}
+	plant.teste();
 
 	string aux = plant.getLSystem();
 	printf("\nLSystem: \"%s\"\n", aux.data());
 
-	plant.teste();
+	
 
 	/* OLD CODE
 	expanded = parser.expand(EXPANSIONS_NUMBER);
