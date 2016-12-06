@@ -7,7 +7,7 @@ TreeNode::TreeNode(){
 	width = -1;
 	length = -1;
 	stage = -1;
-	nodes = list<TreeNode>();
+	nodes = list<TreeNode*>();
 	color[0] = -1;
 	color[1] = -1;
 	color[3] = -1;
@@ -21,7 +21,7 @@ TreeNode::TreeNode(char type, TreeNode* father){
 	width = 1;
 	length = 0;
 	stage = 1;
-	nodes = list<TreeNode>();
+	nodes = list<TreeNode*>();
 	color[0] = 0;
 	color[1] = 1;
 	color[3] = 0;
@@ -35,7 +35,21 @@ TreeNode::TreeNode(char type, TreeNode * father, float angle){
 	width = 1;
 	length = 0;
 	stage = 1;
-	nodes = list<TreeNode>();
+	nodes = list<TreeNode*>();
+	color[0] = 0;
+	color[1] = 1;
+	color[3] = 0;
+	created = clock();
+	this->angle = angle;
+	this->father = father;
+}
+
+TreeNode::TreeNode(char type, TreeNode * father, float angle, int stage){
+	this->type = type;
+	width = 1;
+	length = 0;
+	this->stage = stage;
+	nodes = list<TreeNode*>();
 	color[0] = 0;
 	color[1] = 1;
 	color[3] = 0;
@@ -49,7 +63,7 @@ TreeNode::TreeNode(const TreeNode &node) {
 	this->width = node.width;
 	this->length = node.length;
 	this->stage = node.stage;
-	this->nodes = node.nodes;
+	this->nodes = list<TreeNode*>(node.nodes);
 	this->color[0] = node.color[0];
 	this->color[1] = node.color[1];
 	this->color[2] = node.color[2];
@@ -110,12 +124,12 @@ void TreeNode::setAngle(float newAngle){
 	angle = newAngle;
 }
 
-list<TreeNode>* TreeNode::getNodes(){
-	return &nodes;
+list<TreeNode*> TreeNode::getNodes(){
+	return nodes;
 }
 
 void TreeNode::addNode(TreeNode* node){
-	nodes.push_back(*node);
+	nodes.push_back(node);
 }
 
 TreeNode * TreeNode::getFather(){
@@ -130,12 +144,11 @@ int TreeNode::setFather(TreeNode * newFather){
 
 int TreeNode::grow(list<ProductionRule> prodRule, float angleChange){
 	list<ProductionRule>::iterator it;
-	list<TreeNode>::iterator tnIt;
+	list<TreeNode*>::iterator tnIt;
 	string::iterator sIt;
-	list<TreeNode> old;
+	list<TreeNode*> old;
 	string result;
 	TreeNode *aux;
-	TreeNode aux2;
 	TreeNode *current = this;
 	TreeNode *goBackTo = this;
 	float angleMod = angle;
@@ -144,7 +157,7 @@ int TreeNode::grow(list<ProductionRule> prodRule, float angleChange){
 
 	if (!this->nodes.empty()) {
 		printf("\tSaving old nodes...\n");
-		old = list<TreeNode> (this->nodes);
+		old = list<TreeNode*> (this->nodes);
 		this->nodes.clear();
 	}
 
@@ -209,14 +222,14 @@ int TreeNode::grow(list<ProductionRule> prodRule, float angleChange){
 		}
 	}
 
-	/*printf("\tLoading old nodes...\n");
+	printf("\tLoading old nodes...\n");
 	for (tnIt = old.begin(); tnIt != old.end(); tnIt++) {
-		aux2 = *tnIt;
-		aux2->setAngle(aux2->getAngle() + angleMod);
-		aux2->grow(prodRule, angleChange);
-		current->addNode(aux2);
+		aux = *tnIt;
+		aux->setAngle(aux->getAngle() + angleMod);
+		aux->grow(prodRule, angleChange);
+		current->addNode(aux);
 	}
-	printf("\tComplete...\n");*/
+	printf("\tComplete...\n");
 	
 
 	return TREE_NODE_DONE;
@@ -224,8 +237,8 @@ int TreeNode::grow(list<ProductionRule> prodRule, float angleChange){
 
 string TreeNode::getLSystem(){
 	//printf("teste\n");
-	list<TreeNode>::iterator it;
-
+	list<TreeNode*>::iterator it;
+	TreeNode* aux;
 	string r;
 	r += type;
 
@@ -237,17 +250,18 @@ string TreeNode::getLSystem(){
 	if (nodes.size() == 1) {
 		printf("1 filho\n");
 		it = nodes.begin();
-		TreeNode aux = *it;
-		r += aux.getLSystem();
+		aux = *it;
+		r += aux->getLSystem();
 	}
 	else {
 		printf("2 ou mais filhos\n");
 		r += '[';
 		for (it = nodes.begin(); it != nodes.end(); it++) {
-			TreeNode aux = *it;
-			r += aux.getLSystem();
+			aux = *it;
+			r += aux->getLSystem();
+			r += ']';
 		}
-		r += ']';
+		
 	}
 	
 	return r;

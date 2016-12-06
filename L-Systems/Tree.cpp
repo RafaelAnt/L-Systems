@@ -18,6 +18,7 @@ Tree::Tree(string axiom, list<ProductionRule> prods,float maxLength, float maxWi
 	this->widthGrowthRate = widthGrowthRate;
 	this->angle = angle;
 
+	TreeNode *aux;
 
 	char ch = axiom.at(0);
 	start = TreeNode(ch, nullptr);
@@ -26,10 +27,10 @@ Tree::Tree(string axiom, list<ProductionRule> prods,float maxLength, float maxWi
 	//printf("char do start:     \'%c\'\n", start.getType());
 	for (unsigned int j = 1; j < axiom.length(); j++) {
 		ch = axiom.at(j);
-		TreeNode aux (ch, last);
+		aux = new TreeNode (ch, last);
 		//printf("char do Treenode:     \'%c\'\n", aux.getType());
-		last->addNode(&aux);
-		last = &aux;
+		last->addNode(aux);
+		last = aux;
 	}
 
 }
@@ -110,24 +111,25 @@ void Tree::teste(){
 	printf("\n\n\nTESTE\n\nNumero de filhos:\n");
 
 	
-	TreeNode aux = start;
-	list<TreeNode>* qq;
+	TreeNode* aux = &start;
+	list<TreeNode*> qq;
 	int s;
 
 	while (true){
 		
 		//printf("1 passo: %c\n", aux->getType());
-		qq = aux.getNodes();
+		qq = aux->getNodes();
 		//printf("Passei o 2 passo\n");
-		s = qq->size();
+		s = qq.size();
 			
 		printf("\t%d\n", s);
+
 		if (s == 0) {
 			break;
 		}
 		else {
 			//printf("Aux antes:  %x\n", aux);
-			aux = *aux.getNodes()->begin();
+			aux = *aux->getNodes().begin();
 			//if (aux == nullptr) 
 			//printf("Aux:  %x\n",aux);
 		}
