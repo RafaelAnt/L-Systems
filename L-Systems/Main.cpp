@@ -40,13 +40,11 @@ Tree plant;
 //vector<string> *stages = new vector<string>();
 
 void push() {
-	stage++;
 	glPushMatrix();	
 }
 
 void pop() {
 	glPopMatrix();
-	stage--;
 }
 
 
@@ -125,10 +123,12 @@ void display(void) {
 	glPopAttrib();
 	glColor3f(0, 1, 0);
 
+	//printf("Vou desenhar\n");
 	if (plant.draw() != TREE_DONE) {
 		printf("Fatal Error\n");
 		exit(0);
 	}
+	//printf("Desenhei\n\n");
 
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -154,7 +154,7 @@ void animate() {
 		length[0] = 0.001;
 	}*/
 	
-	if (length[0] < 1) {
+	/*if (length[0] < 1) {
 		length[0] += 0.05;
 		lineWidth[0] += 0.01;
 	}
@@ -178,7 +178,7 @@ void animate() {
 				length[i] = 0.001;
 			}
 		}
-	}
+	}*/
 	
 
 	glutPostRedisplay();
@@ -222,7 +222,7 @@ void keyboard(unsigned char key, int x, int y){
 	case'g':
 		printf("Increasing growth...\n");
 		plant.grow(1);
-		printf("New L-System:\n%c\n\n", plant.getLSystem().data());
+		printf("New L-System:\n%s\n\n", plant.getLSystem().data());
 		break;
 
 	default:

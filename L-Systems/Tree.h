@@ -3,6 +3,7 @@
 #include <list>
 #include <stdio.h>
 #include <GL/glut.h>
+#include <stack> 
 
 #include "ProductionRule.h"
 #include "TreeNode.h"

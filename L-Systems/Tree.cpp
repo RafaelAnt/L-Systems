@@ -123,17 +123,31 @@ void drawLine(TreeNode * node) {
 }
 
 int Tree::draw(){
-	TreeNode *current = &start;
+	TreeNode *current;
 	TreeNode *goBackTo = nullptr;
-	list<TreeNode*>::iterator it;
-	list<TreeNode*> queue();
+	list<TreeNode*> TNlist;
+	list<TreeNode*>::reverse_iterator it;
+	stack<TreeNode*> q;
 	float degree = 0;
+	int oldStage = 1;
+	q.push(&start);
 
-	// Adicionar queue de nodos por fazer??
 
+	while (!q.empty()) {
 
+		current = q.top();
+		q.pop();
 
-	while (current != nullptr) {
+		if(current->getStage() > oldStage){
+			oldStage = current->getStage();
+			glPushMatrix();
+		}
+		else {
+			if (current->getStage() < oldStage) {
+				oldStage = current->getStage();
+				glPopMatrix();
+			}
+		}
 
 		//Rotate if needed
 		if (current->getAngle() != degree) {
@@ -146,20 +160,16 @@ int Tree::draw(){
 		drawLine(current);
 
 		if (current->getNodes().size() == 0) {
-			if (goBackTo == nullptr) {
-				break;
-			}
-			else {
-				current = goBackTo;
-				goBackTo = nullptr;
+			//n faz nada
+		}
+		else {
+			TNlist = current->getNodes();
+			for (it = TNlist.rbegin(); it != TNlist.rend(); it++) {
+				q.push(*it);
 			}
 		}
 
 
-
-		for (it = current->getNodes().begin(); it != current->getNodes().end(); it++) {
-
-		}
 
 	}
 
