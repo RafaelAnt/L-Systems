@@ -8,9 +8,8 @@
 #include "Parser.h"
 #include "TreeNode.h"
 #include "Tree.h"
-#include "Main.h"
 
-#define PI 3.1415
+//#define PI 3.1415
 #define EXPANSIONS_NUMBER 4
 
 using namespace std;
@@ -19,11 +18,11 @@ double lastTime = 0, elapsedTime = 0, lastElapsedTime = 0;
 
 float degree = 0;
 
-float length[EXPANSIONS_NUMBER];
+/*float length[EXPANSIONS_NUMBER];
 float lineWidth[EXPANSIONS_NUMBER];
 int linesNumber[EXPANSIONS_NUMBER];
 int linesToDraw[EXPANSIONS_NUMBER];
-int lastDrawn[EXPANSIONS_NUMBER];
+int lastDrawn[EXPANSIONS_NUMBER];*/
 
 
 float eyeX = 50;
@@ -33,8 +32,8 @@ float lookX = 0;
 float lookY = 30;
 float lookZ = 0;
 
-int growNumber = 1;
-int stage=0;
+//int growNumber = 1;
+//int stage=0;
 
 string expanded;
 Tree plant;
@@ -50,120 +49,16 @@ void pop() {
 	stage--;
 }
 
-void rotL() {
-	glRotatef(degree, 1, 0, 0);
-	glRotatef(degree, 0, 1, 0);
-	glRotatef(degree, 0, 0, 1);
-}
 
-void rotR() {
-	glRotatef(-degree, 1, 0, 0);
-	glRotatef(degree, 0, 1, 0);
-	glRotatef(-degree, 0, 0, 1);
-}
 
-int getTotalLines() {
+/*int getTotalLines() {
 	int r=0;
 	for (int i = 0; i < EXPANSIONS_NUMBER; i++) {
 		r += linesNumber[i];
 	}
 	return r;
-}
+}*/
 
-void drawLine() {
-	glPushAttrib(GL_LIGHTING_BIT);//saves current lighting stuff
-
-	GLfloat ambient[4] = { 0.55f, 0.27f, 0.07f };    // ambient reflection
-	GLfloat specular[4] = { 0.55f, 0.27f, 0.07f };   // specular reflection
-	GLfloat diffuse[4] = { 0.55f, 0.27f, 0.07f };   // diffuse reflection
-
-	// set the ambient reflection for the object
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-	// set the diffuse reflection for the object
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-	// set the specular reflection for the object      
-	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-
-	// Stage is the push count
-
-	//glLineWidth(lineWidth[stage] - (linesNumber[stage] * 0.001));
-	glLineWidth(1);
-	
-	if (linesNumber[stage] <= linesToDraw[stage] && linesNumber[stage] > lastDrawn[stage]) {
-		glBegin(GL_LINES);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, length[stage], 0);
-		glEnd();
-		glTranslatef(0, length[stage], 0);
-	}
-	
-	if (linesNumber[stage] <= linesToDraw[stage] && linesNumber[stage] < lastDrawn[stage]) {
-		glBegin(GL_LINES);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, 1, 0);
-		glEnd();
-		glTranslatef(0, 1, 0);
-	}
-	
-	/*
-	if (getTotalLines() <= linesToDraw[0]) {
-		glBegin(GL_LINES);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, 1, 0);
-		glEnd();
-		glTranslatef(0, 1, 0);
-	}
-	if (getTotalLines() == linesToDraw[0]) {
-		glBegin(GL_LINES);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, length[0], 0);
-		glEnd();
-		glTranslatef(0, length[0], 0);
-	}
-
-	*/
-
-	glPopAttrib();
-}
-
-
-void draw() {
-	char ch;
-	stage = 0;
-	for (int i = 0; i < EXPANSIONS_NUMBER; i++) {
-		linesNumber[i] = 0;
-	}
-
-	for (unsigned int i = 0; i < expanded.length(); i++) {
-		ch = expanded.at(i);
-
-		switch (ch) {
-		case '[':
-			push();
-			break;
-
-		case ']':
-			pop();
-			break;
-
-		case '+':
-			rotR();
-			break;
-
-		case '-':
-			rotL();
-			break;
-
-		case 'F':
-			linesNumber[stage]++;
-			drawLine();
-			break;
-
-		default: //other
-			break;
-		}
-	}
-}
 
 void display(void) {
 	// start by clearing the screen and depth buffer
@@ -229,7 +124,12 @@ void display(void) {
 	glPopMatrix();
 	glPopAttrib();
 	glColor3f(0, 1, 0);
-	draw();
+
+	if (plant.draw() != TREE_DONE) {
+		printf("Fatal Error\n");
+		exit(0);
+	}
+
 	glutSwapBuffers();
 	glutPostRedisplay();
 }
@@ -288,6 +188,7 @@ void animate() {
 void keyboard(unsigned char key, int x, int y){
 	switch (key) {
 	case 'q':			// q - Exit the program
+		printf("\nThe End!\n");
 		exit(0);
 		break;
 
@@ -317,10 +218,11 @@ void keyboard(unsigned char key, int x, int y){
 
 	case 'r':
 		printf("Restarting Animation...\n");
-		//stage = 0;
+		//plant = Tree(parser.getAxiom(),)
 	case'g':
-		printf("Increasing growth...");
+		printf("Increasing growth...\n");
 		plant.grow(1);
+		printf("New L-System:\n%c\n\n", plant.getLSystem().data());
 		break;
 
 	default:
@@ -482,9 +384,10 @@ int main(int argc, char** argv) {
 	}
 	linesToDraw[0] = 1;
 	*/
+
 	glutMain(argc, argv);
 	
 	//system("pause");
-	printf("\nThe End!\n");
+	
 	return 0;
 }

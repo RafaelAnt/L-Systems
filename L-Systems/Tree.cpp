@@ -97,6 +97,75 @@ int Tree::grow(int number){
 	return TREE_DONE;
 }
 
+void drawLine(TreeNode * node) {
+	glPushAttrib(GL_LIGHTING_BIT);//saves current lighting stuff
+
+	GLfloat ambient[4] = { 0.55f, 0.27f, 0.07f };    // ambient reflection
+	GLfloat specular[4] = { 0.55f, 0.27f, 0.07f };   // specular reflection
+	GLfloat diffuse[4] = { 0.55f, 0.27f, 0.07f };   // diffuse reflection
+
+													// set the ambient reflection for the object
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+	// set the diffuse reflection for the object
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+	// set the specular reflection for the object      
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+
+	glLineWidth(node->getWidth());
+
+	glBegin(GL_LINES);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, node->getStage(), 0);
+	glEnd();
+	glTranslatef(0, node->getStage(), 0);
+	
+	glPopAttrib();
+}
+
+int Tree::draw(){
+	TreeNode *current = &start;
+	TreeNode *goBackTo = nullptr;
+	list<TreeNode*>::iterator it;
+	list<TreeNode*> queue();
+	float degree = 0;
+
+	// Adicionar queue de nodos por fazer??
+
+
+
+	while (current != nullptr) {
+
+		//Rotate if needed
+		if (current->getAngle() != degree) {
+			glRotatef((degree - current->getAngle()), 1, 0, 0);
+			glRotatef((degree - current->getAngle()), 0, 1, 0);
+			glRotatef((degree - current->getAngle()), 0, 0, 1);
+			degree = current->getAngle();
+		}
+
+		drawLine(current);
+
+		if (current->getNodes().size() == 0) {
+			if (goBackTo == nullptr) {
+				break;
+			}
+			else {
+				current = goBackTo;
+				goBackTo = nullptr;
+			}
+		}
+
+
+
+		for (it = current->getNodes().begin(); it != current->getNodes().end(); it++) {
+
+		}
+
+	}
+
+	return TREE_DONE;
+}
+
 string Tree::getLSystem(){
 	//TreeNode filho = *start.getNodes().begin();
 	//printf("good so far\n");

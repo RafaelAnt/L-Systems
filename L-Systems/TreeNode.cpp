@@ -152,16 +152,17 @@ int TreeNode::grow(list<ProductionRule> prodRule, float angleChange){
 	TreeNode *current = this;
 	TreeNode *goBackTo = this;
 	float angleMod = angle;
+	int stageMod = this->stage;
 
-	printf("Growing %c...\n", type);
+	//printf("Growing %c...\n", type);
 
 	if (!this->nodes.empty()) {
-		printf("\tSaving old nodes...\n");
+		//printf("\tSaving old nodes...\n");
 		old = list<TreeNode*> (this->nodes);
 		this->nodes.clear();
 	}
 
-	printf("\tFinding Production Rule...\n");
+	//printf("\tFinding Production Rule...\n");
 	for (it = prodRule.begin(); it != prodRule.end(); it++) {
 		ProductionRule aux = *it;
 		if (aux.getTarget() == this->type) {
@@ -174,47 +175,47 @@ int TreeNode::grow(list<ProductionRule> prodRule, float angleChange){
 		return TREE_NODE_INVALID_PRODUCTION_RULE;
 	}
 	else {
-		printf("\tFound.\n");
+		//printf("\tFound.\n");
 	}
 	
 	if (result.at(0) != this->type) {
-		printf("\tChanging my type to %c...\n", result.at(0));
+		//printf("\tChanging my type to %c...\n", result.at(0));
 		this->type = result.at(0);
 	}
 
-	printf("\tGrowth started...\n");
+	//printf("\tGrowth started...\n");
 	for (sIt = result.begin() + 1; sIt != result.end(); sIt++) {
 		char c = *sIt;
 		switch (c){
 		case 'F':
 			
-			aux = new TreeNode ('F', current, angleMod);
+			aux = new TreeNode ('F', current, angleMod, stageMod);
 			current->addNode(aux);
-																									//aux2 = *current->getNodes().begin(); // é o aux1
-																									//printf("\t\tF\t\tAdicionado novo F ao current: angulo: %f, angulo atravez do current: %f \n", aux.getAngle(), aux2.getAngle());
-			printf("\t\tF\t\tAdicionado novo F ao current: angulo: %f\n", aux->getAngle());
+			//printf("\t\tF\t\tAdicionado novo F ao current: angulo: %f, stage: %d\n", aux->getAngle(), stageMod);
 			current = aux;
 			break;
 
 		case '+':
 			
 			angleMod += angleChange;
-			printf("\t\t+\t\tNew Angle: %f\n",angleMod);
+			//printf("\t\t+\t\tNew Angle: %f\n",angleMod);
 			break;
 
 		case '-':
 			angleMod -= angleChange;
-			printf("\t\t-\t\tNew Angle: %f\n", angleMod);
+			//printf("\t\t-\t\tNew Angle: %f\n", angleMod);
 			break;
 			
 		case '[':
-			printf("\t\t[\n");
+			//printf("\t\t[\n");
 			goBackTo = current;
+			stageMod++;
 			break;
 
 		case ']':
-			printf("\t\t]\n");
+			//printf("\t\t]\n");
 			current = goBackTo;
+			stageMod--;
 			break;
 
 		default:
@@ -222,14 +223,14 @@ int TreeNode::grow(list<ProductionRule> prodRule, float angleChange){
 		}
 	}
 
-	printf("\tLoading old nodes...\n");
+	//printf("\tLoading old nodes...\n");
 	for (tnIt = old.begin(); tnIt != old.end(); tnIt++) {
 		aux = *tnIt;
 		aux->setAngle(aux->getAngle() + angleMod);
 		aux->grow(prodRule, angleChange);
 		current->addNode(aux);
 	}
-	printf("\tComplete...\n");
+	//printf("\tComplete...\n");
 	
 
 	return TREE_NODE_DONE;
@@ -243,23 +244,28 @@ string TreeNode::getLSystem(){
 	r += type;
 
 	if (nodes.size() == 0) {
-		printf("0 filhos\n");
+		//printf("0 filhos\n");
 		return r;
 	}
 
 	if (nodes.size() == 1) {
-		printf("1 filho\n");
+		//printf("1 filho\n");
 		it = nodes.begin();
 		aux = *it;
 		r += aux->getLSystem();
 	}
 	else {
-		printf("2 ou mais filhos\n");
-		r += '[';
+		//printf("2 ou mais filhos\n");
+		
 		for (it = nodes.begin(); it != nodes.end(); it++) {
 			aux = *it;
+			if (aux->getStage() > this->getStage()) {
+				r += '[';
+			}
 			r += aux->getLSystem();
-			r += ']';
+			if (aux->getStage() > this->getStage()) {
+				r += ']';
+			}
 		}
 		
 	}

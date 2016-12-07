@@ -2,6 +2,7 @@
 #include <iostream>
 #include <list>
 #include <stdio.h>
+#include <GL/glut.h>
 
 #include "ProductionRule.h"
 #include "TreeNode.h"
@@ -37,6 +38,7 @@ public:
 	int setWidthGrowthRate(float rate);
 
 	int grow(int number);
+	int draw();
 	string getLSystem();
 	void teste();
 };
