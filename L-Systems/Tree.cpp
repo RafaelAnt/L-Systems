@@ -122,69 +122,63 @@ void drawLine(TreeNode * node) {
 	glPopAttrib();
 }
 
+
+
+int drawAux(TreeNode* node, float  degree) {
+	list<TreeNode*>::iterator it;
+	list<TreeNode*> nodes = node->getNodes();
+	TreeNode* aux;
+	//float oldAngle;
+
+	//Rotate if needed
+	if (node->getAngle() != degree) {
+		glRotatef((degree - node->getAngle()), 1, 0, 0);
+		glRotatef((degree - node->getAngle()), 0, 1, 0);
+		glRotatef((degree - node->getAngle()), 0, 0, 1);
+		degree = node->getAngle();
+	}
+	/*else if (node->getAngle() < *degree) {
+		glRotatef(-(*degree - node->getAngle()), 1, 0, 0);
+		glRotatef((*degree - node->getAngle()), 0, 1, 0);
+		glRotatef(-(*degree - node->getAngle()), 0, 0, 1);
+		*degree = node->getAngle();
+	}*/
+
+	if (node->getLength() > 0) {
+		drawLine(node);
+	}
+
+	if (nodes.size() == 0) {
+		return TREE_DONE;
+	}
+
+	if (nodes.size() == 1) {
+		it = nodes.begin();
+		aux = *it;
+		drawAux(aux,degree);
+	}
+	else {
+		for (it = nodes.begin(); it != nodes.end(); it++) {
+			aux = *it;
+			if (aux->getStage() > node->getStage()) {
+				glPushMatrix();
+			}
+			drawAux(aux, degree);
+			if (aux->getStage() > node->getStage()) {
+				glPopMatrix();
+			}
+		}
+	}
+
+
+	return TREE_DONE;
+}
+
+
 int Tree::draw(){
-	TreeNode *current;
-	list<TreeNode*> TNlist;
-	list<TreeNode*>::reverse_iterator it;
-	stack<TreeNode*> q;
 	float degree = 0;
-	int oldStage = 1;
-	TreeNode *oldfather = nullptr;
 
-	q.push(&start);
-
-	while (!q.empty()) {
-
-		current = q.top();
-		q.pop();
-
-
-		if (current->getStage() == oldStage) {
-			if (current->getFather() != nullptr && current->getFather()->getNodes().size() > 1) {
-				glPopMatrix();
-				glPushMatrix();
-			}
-		}
-		else {
-			if (current->getStage() > oldStage) {
-				//printf("Push\n");
-				oldStage = current->getStage();
-				glPushMatrix();
-			}
-			else {
-				//printf("Pop\n");
-				oldStage = current->getStage();
-				glPopMatrix();
-			}
-		}
-
-		//Rotate if needed
-		if (current->getAngle() != degree) {
-			glRotatef((degree - current->getAngle()), 1, 0, 0);
-			glRotatef((degree - current->getAngle()), 0, 1, 0);
-			glRotatef((degree - current->getAngle()), 0, 0, 1);
-			degree = current->getAngle();
-		}
-
-		if (current->getLength() > 0) {
-			drawLine(current);
-		}
-		
-
-		if (current->getNodes().size() != 0) {
-			TNlist = current->getNodes();
-			for (it = TNlist.rbegin(); it != TNlist.rend(); it++) 
-				q.push(*it);
-		}
-
-	}
-
-	while (oldStage > 1) {
-		glPopMatrix();
-		oldStage--;
-	}
-
-	//printf("\n\n\n");
+	drawAux(&start, degree);
 
 	return TREE_DONE;
 }

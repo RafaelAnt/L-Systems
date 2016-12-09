@@ -18,11 +18,11 @@ double lastTime = 0, elapsedTime = 0, lastElapsedTime = 0;
 
 float degree = 0;
 
-float eyeX = 50;
-float eyeY = 50;
+float eyeX = 30;
+float eyeY = 30;
 float eyeZ = 0;
 float lookX = 0;
-float lookY = 0;
+float lookY = 10;
 float lookZ = 0;
 
 //int growNumber = 1;
@@ -251,9 +251,9 @@ int main(int argc, char** argv) {
 
 	degree = parser.getDegree();
 
-	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1, 1, 0.005, 0.005, degree);
+	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1, 1, 0.01, 0.005, degree);
 	
-	r = plant.grow(2);
+	r = plant.grow(EXPANSIONS_NUMBER);
 	if (r != TREE_DONE) {
 		switch (r){
 		case (TREE_NODE_INVALID_PRODUCTION_RULE):
