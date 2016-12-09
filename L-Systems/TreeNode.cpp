@@ -11,7 +11,7 @@ TreeNode::TreeNode(){
 	color[0] = -1;
 	color[1] = -1;
 	color[3] = -1;
-	created = clock();
+	created = timeGetTime();
 	angle = -1;
 	father = nullptr;
 }
@@ -25,7 +25,7 @@ TreeNode::TreeNode(char type, TreeNode* father){
 	color[0] = 0;
 	color[1] = 1;
 	color[3] = 0;
-	created = clock();
+	created = timeGetTime();
 	angle = 0;
 	this->father = father;
 }
@@ -39,7 +39,7 @@ TreeNode::TreeNode(char type, TreeNode * father, float angle){
 	color[0] = 0;
 	color[1] = 1;
 	color[3] = 0;
-	created = clock();
+	created = timeGetTime();
 	this->angle = angle;
 	this->father = father;
 }
@@ -53,7 +53,7 @@ TreeNode::TreeNode(char type, TreeNode * father, float angle, int stage){
 	color[0] = 0;
 	color[1] = 1;
 	color[3] = 0;
-	created = clock();
+	created = timeGetTime();
 	this->angle = angle;
 	this->father = father;
 }
@@ -112,8 +112,13 @@ int TreeNode::setStage(int newStage){
 	return TREE_NODE_DONE;
 }
 
-clock_t TreeNode::getCreated(){
+double TreeNode::getCreated(){
 	return created;
+}
+
+int TreeNode::setCreated(double time){
+	this->created = time;
+	return TREE_NODE_DONE;
 }
 
 float TreeNode::getAngle(){
@@ -271,5 +276,19 @@ string TreeNode::getLSystem(){
 	}
 	
 	return r;
+}
+
+int TreeNode::incrementLength(float ratio){
+	if (length >= 1) return TREE_NODE_MAX_LENGTH_REACHED;
+
+	length += ratio / stage;
+
+	return TREE_NODE_DONE;
+}
+
+int TreeNode::incrementWidth(float ratio){
+	if (width >= 3) return TREE_NODE_MAX_WIDTH_REACHED;
+
+	return TREE_NODE_DONE;
 }
 

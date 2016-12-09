@@ -42,4 +42,6 @@ public:
 	int draw();
 	string getLSystem();
 	void teste();
+	int animate(double time);
+	int reset();
 };

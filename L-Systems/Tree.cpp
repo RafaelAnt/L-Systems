@@ -115,35 +115,44 @@ void drawLine(TreeNode * node) {
 
 	glBegin(GL_LINES);
 		glVertex3f(0, 0, 0);
-		glVertex3f(0, node->getStage(), 0);
+		glVertex3f(0, node->getLength(), 0);
 	glEnd();
-	glTranslatef(0, node->getStage(), 0);
+	glTranslatef(0, node->getLength(), 0);
 	
 	glPopAttrib();
 }
 
 int Tree::draw(){
 	TreeNode *current;
-	TreeNode *goBackTo = nullptr;
 	list<TreeNode*> TNlist;
 	list<TreeNode*>::reverse_iterator it;
 	stack<TreeNode*> q;
 	float degree = 0;
 	int oldStage = 1;
-	q.push(&start);
+	TreeNode *oldfather = nullptr;
 
+	q.push(&start);
 
 	while (!q.empty()) {
 
 		current = q.top();
 		q.pop();
 
-		if(current->getStage() > oldStage){
-			oldStage = current->getStage();
-			glPushMatrix();
+
+		if (current->getStage() == oldStage) {
+			if (current->getFather() != nullptr && current->getFather()->getNodes().size() > 1) {
+				glPopMatrix();
+				glPushMatrix();
+			}
 		}
 		else {
-			if (current->getStage() < oldStage) {
+			if (current->getStage() > oldStage) {
+				//printf("Push\n");
+				oldStage = current->getStage();
+				glPushMatrix();
+			}
+			else {
+				//printf("Pop\n");
 				oldStage = current->getStage();
 				glPopMatrix();
 			}
@@ -157,32 +166,30 @@ int Tree::draw(){
 			degree = current->getAngle();
 		}
 
-		drawLine(current);
-
-		if (current->getNodes().size() == 0) {
-			//n faz nada
+		if (current->getLength() > 0) {
+			drawLine(current);
 		}
-		else {
+		
+
+		if (current->getNodes().size() != 0) {
 			TNlist = current->getNodes();
-			for (it = TNlist.rbegin(); it != TNlist.rend(); it++) {
+			for (it = TNlist.rbegin(); it != TNlist.rend(); it++) 
 				q.push(*it);
-			}
 		}
-
-
 
 	}
+
+	while (oldStage > 1) {
+		glPopMatrix();
+		oldStage--;
+	}
+
+	//printf("\n\n\n");
 
 	return TREE_DONE;
 }
 
 string Tree::getLSystem(){
-	//TreeNode filho = *start.getNodes().begin();
-	//printf("good so far\n");
-	//TreeNode neto = *filho.getNodes().begin();
-	//printf("good so far\n");
-
-	//printf("Start: %c\nFilho: %c\n Neto1: %c \n", start.getType(), filho.getType(), neto.getType());
 	return start.getLSystem();
 }
 
@@ -215,5 +222,58 @@ void Tree::teste(){
 	}
 	
 
+}
+
+int Tree::animate(double time){
+	TreeNode *current;
+	list<TreeNode*> TNlist;
+	list<TreeNode*>::reverse_iterator it;
+	stack<TreeNode*> q;
+
+	q.push(&start);
+
+	while (!q.empty()) {
+		current = q.top();
+		q.pop();
+
+		current->incrementLength(this->lengthGrowthRate);
+		current->incrementWidth(this->widthGrowthRate);
+
+		if(current->getLength()>0.5){
+			if (current->getNodes().size() != 0) {
+				TNlist = current->getNodes();
+				for (it = TNlist.rbegin(); it != TNlist.rend(); it++)
+					q.push(*it);
+			}
+		}
+		
+	}
+
+	return TREE_DONE;
+}
+
+int Tree::reset(){
+	TreeNode *current;
+	list<TreeNode*> TNlist;
+	list<TreeNode*>::iterator it;
+	stack<TreeNode*> q;
+
+	q.push(&start);
+
+	while (!q.empty()) {
+		current = q.top();
+		q.pop();
+
+		current->setLength(0);
+		current->setWidth(1);
+
+		if (current->getNodes().size() != 0) {
+			TNlist = current->getNodes();
+			for (it = TNlist.begin(); it != TNlist.end(); it++)
+				q.push(*it);
+		}
+	}
+
+	return TREE_DONE;
 }
 

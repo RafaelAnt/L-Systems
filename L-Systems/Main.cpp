@@ -18,18 +18,11 @@ double lastTime = 0, elapsedTime = 0, lastElapsedTime = 0;
 
 float degree = 0;
 
-/*float length[EXPANSIONS_NUMBER];
-float lineWidth[EXPANSIONS_NUMBER];
-int linesNumber[EXPANSIONS_NUMBER];
-int linesToDraw[EXPANSIONS_NUMBER];
-int lastDrawn[EXPANSIONS_NUMBER];*/
-
-
 float eyeX = 50;
 float eyeY = 50;
 float eyeZ = 0;
 float lookX = 0;
-float lookY = 30;
+float lookY = 0;
 float lookZ = 0;
 
 //int growNumber = 1;
@@ -37,16 +30,6 @@ float lookZ = 0;
 
 string expanded;
 Tree plant;
-//vector<string> *stages = new vector<string>();
-
-void push() {
-	glPushMatrix();	
-}
-
-void pop() {
-	glPopMatrix();
-}
-
 
 
 /*int getTotalLines() {
@@ -68,14 +51,12 @@ void display(void) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	float axisDist = 10;
+	//float axisDist = 10;
 
 
 	gluLookAt(eyeX, eyeY, eyeZ, lookX, lookY, lookZ, 0, 1, 0);
 	
-
 	//glPushMatrix();
-
 	//EIXOS
 	//glLineWidth(1);
 	/*glBegin(GL_LINES);           
@@ -93,22 +74,21 @@ void display(void) {
 	glVertex3f(0.0, 0.0, axisDist);
 	glEnd();*/
 
-	//glColor3f(1.0, 0.75, 0.3);
-	//glutSolidCube(1);
-	//glColor3f(0, 0, 0);
-	//glPopMatrix();
-
 	glPushMatrix();
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	glPushAttrib(GL_LIGHTING_BIT); //saves current lighting stuff
-	GLfloat ambient[4] = { 0.82f, 0.41f, 0.12f };    // ambient reflection
-	GLfloat diffuse[4] = { 0.82f, 0.41f, 0.12f };   // diffuse reflection    
-												 // set the ambient reflection for the object
+	//saves current lighting stuff
+	glPushAttrib(GL_LIGHTING_BIT); 
+	// ambient reflection
+	GLfloat ambient[4] = { 0.82f, 0.41f, 0.12f }; 
+	// diffuse reflection  
+	GLfloat diffuse[4] = { 0.82f, 0.41f, 0.12f };
+	// set the ambient reflection for the object
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
 	// set the diffuse reflection for the object
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 
+	// Floor
 	glBegin(GL_TRIANGLES);
 		glColor3f(1.0, 0, 0);
 		glVertex3f(-10, 0, -10);
@@ -123,12 +103,12 @@ void display(void) {
 	glPopAttrib();
 	glColor3f(0, 1, 0);
 
-	//printf("Vou desenhar\n");
+	// Tree
 	if (plant.draw() != TREE_DONE) {
-		printf("Fatal Error\n");
+		printf("Fatal Error!\n");
 		exit(0);
 	}
-	//printf("Desenhei\n\n");
+	
 
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -137,49 +117,15 @@ void display(void) {
 void animate() {
 	if (lastTime == 0)
 		lastTime = timeGetTime();
-
+		
 	elapsedTime = timeGetTime() - lastTime;
 
 	// TODO: Change the angle to make it blow in the wind
 
-	/*
-	if (length[0] < 1) {
-		length[0] += 0.01;
-		lineWidth[0] += 0.01;
+	if (plant.animate(elapsedTime) != TREE_DONE) {
+		printf("Fatal Error!\n");
+		exit(0);
 	}
-	else {
-		//lastDrawn[0] = linesToDraw[0];
-		linesToDraw[0] += 1;
-		//printf("lines do draw: %d    Lines Number: %d\n", linesToDraw[0], linesNumber[0]);
-		length[0] = 0.001;
-	}*/
-	
-	/*if (length[0] < 1) {
-		length[0] += 0.05;
-		lineWidth[0] += 0.01;
-	}
-	else {
-		lastDrawn[0] = linesToDraw[0];
-		linesToDraw[0]+=1;
-		//printf("lines do draw: %d    Lines Number: %d\n", linesToDraw[0], linesNumber[0]);
-		length[0] = 0.001;
-	}
-
-	
-	for (int i = 1; i < EXPANSIONS_NUMBER; i++) {
-		if (lastDrawn[i - 1] > 10) {
-			if (length[i] < 1) {
-				length[i] += 0.05;
-				lineWidth[i] += 0.01;
-			}
-			else {
-				lastDrawn[i] = linesToDraw[i];
-				linesToDraw[i]+= 2;
-				length[i] = 0.001;
-			}
-		}
-	}*/
-	
 
 	glutPostRedisplay();
 
@@ -218,9 +164,12 @@ void keyboard(unsigned char key, int x, int y){
 
 	case 'r':
 		printf("Restarting Animation...\n");
-		//plant = Tree(parser.getAxiom(),)
+		plant.reset();
+		break;
+
 	case'g':
 		printf("Increasing growth...\n");
+		plant.reset();
 		plant.grow(1);
 		printf("New L-System:\n%s\n\n", plant.getLSystem().data());
 		break;
@@ -245,11 +194,6 @@ void glutMain(int argc, char** argv) {
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 	glutIdleFunc(animate);
-
-
-	
-
-	
 
 	glutMainLoop();
 }
@@ -307,49 +251,9 @@ int main(int argc, char** argv) {
 
 	degree = parser.getDegree();
 
-	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1, 1, 0.1, 0.1, degree);
-
-	/*TreeNode start = plant.getStart();
-	TreeNode aux1 ('A', &start, 0);
-	TreeNode aux2 ('B', &start, 0);
-	TreeNode aux3 ('C', &start, 0);
-	TreeNode aux4 ('D', &start, 0);
-
+	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1, 1, 0.005, 0.005, degree);
 	
-	
-	
-	aux3.addNode(aux4);
-	aux2.addNode(aux3);
-	aux1.addNode(aux2);
-	start.addNode(aux1);
-
-	TreeNode uio = *start.getNodes().begin();
-	char c = uio.getType();
-	printf("\n\nMEGA TESTE:\tLetra: %c\n", c);
-
-	if (uio.getNodes().empty()) {
-		printf("tá vazia\n");
-	}
-
-	aux1 = *uio.getNodes().begin();
-	if (&aux1 == nullptr) {
-		printf("é null\n");
-	}
-	c = aux1.getType();
-	printf("MEGA TESTE:\tLetra: %c\n", c);
-
-	uio = *aux1.getNodes().begin();
-	c = uio.getType();
-	printf("MEGA TESTE:\tLetra: %c\n", c);*/
-
-
-
-	/*string aux = plant.getLSystem();
-	printf("\nLSystem: \"%s\"\n\n", aux.data());
-	plant.teste();
-	printf("\n\n");*/
-	
-	r = plant.grow(1);
+	r = plant.grow(2);
 	if (r != TREE_DONE) {
 		switch (r){
 		case (TREE_NODE_INVALID_PRODUCTION_RULE):
@@ -362,32 +266,12 @@ int main(int argc, char** argv) {
 			printf("ERRO A CRESCER!!!!\n");
 			break;
 		}
-		
 	}
-	plant.teste();
 
 	string aux = plant.getLSystem();
 	printf("\nLSystem: \"%s\"\n", aux.data());
 
-	
-
-	/* OLD CODE
-	expanded = parser.expand(EXPANSIONS_NUMBER);
-	printf("\nExpanded %d times resulted in:\n%s\n\n", EXPANSIONS_NUMBER, expanded.data());
-	for (int i = 0; i < EXPANSIONS_NUMBER; i++) {
-		length[i] = 0.001;
-		lineWidth[i] = (float)(EXPANSIONS_NUMBER - (0.5 * i));
-		linesNumber[i] = 0;
-		linesToDraw[i] = 0;
-		lastDrawn[i] = 0;
-		//printf("for i = %d, length: %f. lineWidth = %f\n", i, length[i], lineWidth[i]);
-	}
-	linesToDraw[0] = 1;
-	*/
-
 	glutMain(argc, argv);
-	
-	//system("pause");
 	
 	return 0;
 }

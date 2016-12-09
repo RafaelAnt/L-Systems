@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <list>
 #include <time.h>
+#include <Windows.h>
 
 #include "ProductionRule.h"
 
@@ -12,6 +13,8 @@ using namespace std;
 #define TREE_NODE_INVALID_VALUE 301
 #define TREE_NODE_INVALID_PRODUCTION_RULE 302
 #define TREE_NODE_UNDIFINED_SYMBOL 303
+#define TREE_NODE_MAX_LENGTH_REACHED 304
+#define TREE_NODE_MAX_WIDTH_REACHED 305
 
 class TreeNode {
 	char type;
@@ -21,7 +24,7 @@ class TreeNode {
 	list<TreeNode*> nodes;
 	TreeNode *father;
 	float color[3];
-	clock_t created;
+	double created;
 	float angle;
 
 public:
@@ -38,7 +41,8 @@ public:
 	int setLength(float newLength);
 	int getStage();
 	int setStage(int newStage);
-	clock_t getCreated();
+	double getCreated();
+	int setCreated(double time);
 	float getAngle();
 	void setAngle(float newAngle);
 	list<TreeNode*> getNodes();
@@ -48,5 +52,7 @@ public:
 
 	int grow(list<ProductionRule> prodRule, float angleChange);
 	string getLSystem();
+	int incrementLength(float ratio);
+	int incrementWidth(float ratio);
 
 };
