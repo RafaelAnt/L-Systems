@@ -10,7 +10,7 @@
 #include "Tree.h"
 
 //#define PI 3.1415
-#define EXPANSIONS_NUMBER 4
+#define EXPANSIONS_NUMBER 3
 
 using namespace std;
 
@@ -251,7 +251,7 @@ int main(int argc, char** argv) {
 
 	degree = parser.getDegree();
 
-	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1, 1, 0.01, 0.005, degree);
+	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1, 1, 0.1, 0.005, degree);
 	
 	r = plant.grow(EXPANSIONS_NUMBER);
 	if (r != TREE_DONE) {

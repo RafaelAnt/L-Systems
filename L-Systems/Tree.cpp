@@ -88,7 +88,7 @@ int Tree::setWidthGrowthRate(float rate){
 int Tree::grow(int number){
 	int r;
 	for (int i = 0; i < number; i++) {
-		r=start.grow(productionRules, angle);
+		r=start.grow(productionRules);
 		if (r != TREE_NODE_DONE) {
 			return r;
 		}
@@ -122,48 +122,52 @@ void drawLine(TreeNode * node) {
 	glPopAttrib();
 }
 
+void Tree::rotL() {
+	glRotatef(this->angle, 1, 0, 0);
+	glRotatef(this->angle, 0, 1, 0);
+	glRotatef(this->angle, 0, 0, 1);
+}
 
+void Tree::rotR() {
+	glRotatef(-this->angle, 1, 0, 0);
+	glRotatef(this->angle, 0, 1, 0);
+	glRotatef(-this->angle, 0, 0, 1);
+}
 
-int drawAux(TreeNode* node, float  degree) {
+int Tree::drawAux(TreeNode* node) {
 	list<TreeNode*>::iterator it;
 	list<TreeNode*> nodes = node->getNodes();
 	TreeNode* aux;
-	//float oldAngle;
 
 	//Rotate if needed
-	if (node->getAngle() != degree) {
-		glRotatef((degree - node->getAngle()), 1, 0, 0);
-		glRotatef((degree - node->getAngle()), 0, 1, 0);
-		glRotatef((degree - node->getAngle()), 0, 0, 1);
-		degree = node->getAngle();
-	}
-	/*else if (node->getAngle() < *degree) {
-		glRotatef(-(*degree - node->getAngle()), 1, 0, 0);
-		glRotatef((*degree - node->getAngle()), 0, 1, 0);
-		glRotatef(-(*degree - node->getAngle()), 0, 0, 1);
-		*degree = node->getAngle();
-	}*/
-
-	if (node->getLength() > 0) {
-		drawLine(node);
+	switch (node->getType()){
+	case 'F':
+		if (node->getLength() > 0) {
+			drawLine(node);
+		}
+		break;
+	case '+':
+		rotR();
+		break;
+	case '-':
+		rotL();
+		break;
+	default:
+		break;
 	}
 
 	if (nodes.size() == 0) {
 		return TREE_DONE;
 	}
 
-	if (nodes.size() == 1) {
-		it = nodes.begin();
-		aux = *it;
-		drawAux(aux,degree);
-	}
-	else {
+	if (nodes.size() >= 1) {
+
 		for (it = nodes.begin(); it != nodes.end(); it++) {
 			aux = *it;
 			if (aux->getStage() > node->getStage()) {
 				glPushMatrix();
 			}
-			drawAux(aux, degree);
+			drawAux(aux);
 			if (aux->getStage() > node->getStage()) {
 				glPopMatrix();
 			}
@@ -176,11 +180,10 @@ int drawAux(TreeNode* node, float  degree) {
 
 
 int Tree::draw(){
-	float degree = 0;
 
-	drawAux(&start, degree);
+	int r = drawAux(&start);
 
-	return TREE_DONE;
+	return r;
 }
 
 string Tree::getLSystem(){

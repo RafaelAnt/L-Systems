@@ -25,13 +25,11 @@ class TreeNode {
 	TreeNode *father;
 	float color[3];
 	double created;
-	float angle;
 
 public:
 	TreeNode();
 	TreeNode(char type, TreeNode* father);
-	TreeNode(char type, TreeNode* father, float angle);
-	TreeNode(char type, TreeNode* father, float angle, int stage);
+	TreeNode(char type, TreeNode* father, int stage);
 	TreeNode(const TreeNode & node);
 
 	char getType();
@@ -43,14 +41,14 @@ public:
 	int setStage(int newStage);
 	double getCreated();
 	int setCreated(double time);
-	float getAngle();
-	void setAngle(float newAngle);
+	/*float getAngle();
+	void setAngle(float newAngle);*/
 	list<TreeNode*> getNodes();
 	void addNode(TreeNode* node);
 	TreeNode* getFather();
 	int setFather(TreeNode *newFather);
 
-	int grow(list<ProductionRule> prodRule, float angleChange);
+	int grow(list<ProductionRule> prodRule);
 	string getLSystem();
 	int incrementLength(float ratio);
 	int incrementWidth(float ratio);

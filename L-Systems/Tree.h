@@ -44,4 +44,9 @@ public:
 	void teste();
 	int animate(double time);
 	int reset();
+
+private:
+	int drawAux(TreeNode* node);
+	void rotL();
+	void rotR();
 };
