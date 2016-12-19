@@ -16,8 +16,6 @@
 #define TREE_BRANCH_POINTS 8
 using namespace std;
 
-
-
 class Tree {
 	list<ProductionRule> productionRules;
 	TreeNode start;
@@ -49,10 +47,14 @@ public:
 	int animate(double time);
 	int reset();
 
+
 private:
 	int drawAux(TreeNode* node);
 	void rotL();
 	void rotR();
 	int incrementLength(TreeNode *current);
 	int incrementWidth(TreeNode *current);
+	int drawBranch(TreeNode *current);
+	int drawLine(TreeNode *node);
+	int drawIntersection(TreeNode* node);
 };

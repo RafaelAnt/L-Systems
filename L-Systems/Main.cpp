@@ -9,7 +9,7 @@
 #include "TreeNode.h"
 #include "Tree.h"
 
-//#define PI 3.1415
+#define PI 3.1415
 #define EXPANSIONS_NUMBER 3
 
 using namespace std;
@@ -24,6 +24,7 @@ float eyeZ = 0;
 float lookX = 0;
 float lookY = 10;
 float lookZ = 0;
+float camAng = 0;
 
 //int growNumber = 1;
 //int stage=0;
@@ -115,8 +116,7 @@ void display(void) {
 }
 
 void animate() {
-	if (lastTime == 0)
-		lastTime = timeGetTime();
+	if (lastTime == 0) lastTime = timeGetTime();
 		
 	elapsedTime = timeGetTime() - lastTime;
 
@@ -139,27 +139,33 @@ void keyboard(unsigned char key, int x, int y){
 		break;
 
 	case 'w':
-		eyeZ += 1;
-		break;
-
-	case 'a':
-		eyeX -= 1;
-		break;
-
-	case 's':
-		eyeZ -= 1;
-		break;
-
-	case 'd':
-		eyeX += 1;
-		break;
-
-	case '+':
 		eyeY += 1;
 		break;
 
-	case '-':
+	case 'a':
+		if (camAng <= 0) camAng = 360;
+		else camAng--;
+		eyeX = 20 * sin(camAng*PI / 180);
+		eyeZ = 20 * cos(camAng*PI / 180);
+		break;
+
+	case 's':
 		eyeY -= 1;
+		break;
+
+	case 'd':
+		if (camAng >= 360) camAng = 1;
+		else camAng++;
+		eyeX = 20 * sin(camAng*PI / 180);
+		eyeZ = 20 * cos(camAng*PI / 180);
+		break;
+
+	case '+':
+		lookY += 1;
+		break;
+
+	case '-':
+		lookY -= 1;
 		break;
 
 	case 'r':
@@ -251,7 +257,8 @@ int main(int argc, char** argv) {
 
 	degree = parser.getDegree();
 
-	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1, 3, 0.01, 0.005, degree);
+	//				Axioma			prod Rules,				maxLenght, maxWidth, lenght rate, width rate, angulo; 
+	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1.3, 0.4, 0.01, 0.0005, degree);
 	
 	r = plant.grow(EXPANSIONS_NUMBER);
 	if (r != TREE_DONE) {

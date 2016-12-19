@@ -57,5 +57,6 @@ public:
 	string getLSystem();
 	/*int incrementLength(float ratio);
 	int incrementWidth(float ratio);*/
+	int getBranchNumber();
 
 };

@@ -97,7 +97,7 @@ int Tree::grow(int number){
 	return TREE_DONE;
 }
 
-void drawLine(TreeNode * node) {
+int Tree::drawLine(TreeNode * node) {
 	glPushAttrib(GL_LIGHTING_BIT);//saves current lighting stuff
 
 	GLfloat ambient[4] = { 0.55f, 0.27f, 0.07f };    // ambient reflection
@@ -117,9 +117,20 @@ void drawLine(TreeNode * node) {
 		glVertex3f(0, 0, 0);
 		glVertex3f(0, node->getLength(), 0);
 	glEnd();
-	glTranslatef(0, node->getLength(), 0);
+	//glTranslatef(0, node->getLength(), 0);
 	
 	glPopAttrib();
+
+	return TREE_DONE;
+}
+
+
+int Tree::drawIntersection(TreeNode * node){
+	if (node->getBranchNumber() > 1) {
+		glutWireSphere(node->getWidth(), 7, 7);
+		//glutSolidSphere(0.45, 7, 7);
+	}
+	return TREE_DONE;
 }
 
 void Tree::rotL() {
@@ -147,11 +158,24 @@ int Tree::incrementLength(TreeNode *current){
 
 int Tree::incrementWidth(TreeNode *current){
 	float w = current->getWidth();
-	if (w >= (maxWidth - (0.3*current->getStage()))) return TREE_MAX_WIDTH_REACHED;
+	if (w >= (maxWidth - (0.05*current->getStage()))) return TREE_MAX_WIDTH_REACHED;
 
 	w += widthGrowthRate / current->getStage();
 
 	current->setWidth(w);
+	
+	return TREE_DONE;
+}
+
+int Tree::drawBranch(TreeNode * current){
+	//current->getWidth()
+
+	glPushMatrix();
+	glRotatef(-90, 1, 0, 0);
+
+	glutWireCone(current->getWidth(), current->getLength(), 5, 5);
+
+	glPopMatrix();
 	
 	return TREE_DONE;
 }
@@ -166,6 +190,9 @@ int Tree::drawAux(TreeNode* node) {
 	case 'F':
 		if (node->getLength() > 0) {
 			drawLine(node);
+			drawBranch(node);
+			glTranslatef(0, node->getLength(), 0);
+			drawIntersection(node);
 		}
 		break;
 	case '+':
@@ -295,4 +322,3 @@ int Tree::reset(){
 
 	return TREE_DONE;
 }
-

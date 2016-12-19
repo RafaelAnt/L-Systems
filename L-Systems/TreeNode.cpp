@@ -19,7 +19,7 @@ TreeNode::TreeNode(){
 
 TreeNode::TreeNode(char type, TreeNode* father){
 	this->type = type;
-	width = 1;
+	width = 0;
 	length = 0;
 	/*maxWidth = 1;
 	maxLength = 1;*/
@@ -50,7 +50,7 @@ TreeNode::TreeNode(char type, TreeNode* father){
 
 TreeNode::TreeNode(char type, TreeNode * father, int stage){
 	this->type = type;
-	width = 1;
+	width = 0;
 	length = 0;
 	/*maxWidth = 1;
 	maxLength = 1;*/
@@ -310,6 +310,24 @@ string TreeNode::getLSystem(){
 		}
 
 	}
+	return r;
+}
+
+int TreeNode::getBranchNumber(){
+	list<TreeNode*>::iterator it;
+	TreeNode* aux;
+
+	if (this->nodes.size() == 0) return 0;
+
+	int r = 0;
+
+	for (it = nodes.begin(); it != nodes.end(); it++) {
+		aux = *it;
+		if(aux->getType()=='F')	r++;
+		else r += aux->getBranchNumber();
+
+	}
+
 	return r;
 }
 
