@@ -6,6 +6,8 @@ TreeNode::TreeNode(){
 	this->type = '0';
 	width = -1;
 	length = -1;
+	/*maxWidth = 1;
+	maxLength = 1;*/
 	stage = -1;
 	nodes = list<TreeNode*>();
 	color[0] = -1;
@@ -19,6 +21,8 @@ TreeNode::TreeNode(char type, TreeNode* father){
 	this->type = type;
 	width = 1;
 	length = 0;
+	/*maxWidth = 1;
+	maxLength = 1;*/
 	stage = 1;
 	nodes = list<TreeNode*>();
 	color[0] = 0;
@@ -48,6 +52,8 @@ TreeNode::TreeNode(char type, TreeNode * father, int stage){
 	this->type = type;
 	width = 1;
 	length = 0;
+	/*maxWidth = 1;
+	maxLength = 1;*/
 	this->stage = stage;
 	nodes = list<TreeNode*>();
 	color[0] = 0;
@@ -100,6 +106,26 @@ int TreeNode::setLength(float newLength){
 	length = newLength;
 	return TREE_NODE_DONE;
 }
+
+/*float TreeNode::getMaxWidth(){
+	return maxWidth;
+}
+
+int TreeNode::seMaxtWidth(float newWidth){
+	if (newWidth <= 0) return TREE_NODE_INVALID_VALUE;
+	this->maxWidth = newWidth;
+	return TREE_NODE_DONE;
+}
+
+float TreeNode::getMaxLength(){
+	return maxLength;
+}
+
+int TreeNode::setMaxLength(float newLength){
+	if (newLength <= 0) return TREE_NODE_INVALID_VALUE;
+	this->maxWidth = newLength;
+	return TREE_NODE_DONE;
+}*/
 
 int TreeNode::getStage(){
 	return stage;
@@ -285,19 +311,5 @@ string TreeNode::getLSystem(){
 
 	}
 	return r;
-}
-
-int TreeNode::incrementLength(float ratio){
-	if (length >= 1) return TREE_NODE_MAX_LENGTH_REACHED;
-
-	length += ratio / stage;
-
-	return TREE_NODE_DONE;
-}
-
-int TreeNode::incrementWidth(float ratio){
-	if (width >= 3) return TREE_NODE_MAX_WIDTH_REACHED;
-
-	return TREE_NODE_DONE;
 }
 

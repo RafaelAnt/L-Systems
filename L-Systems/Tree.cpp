@@ -111,7 +111,7 @@ void drawLine(TreeNode * node) {
 	// set the specular reflection for the object      
 	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
-	glLineWidth(node->getWidth());
+	glLineWidth(0.5);
 
 	glBegin(GL_LINES);
 		glVertex3f(0, 0, 0);
@@ -132,6 +132,28 @@ void Tree::rotR() {
 	glRotatef(-this->angle, 1, 0, 0);
 	glRotatef(this->angle, 0, 1, 0);
 	glRotatef(-this->angle, 0, 0, 1);
+}
+
+int Tree::incrementLength(TreeNode *current){
+	float l = current->getLength();
+	if (l >= maxLength) return TREE_MAX_LENGTH_REACHED;
+
+	l += lengthGrowthRate / current->getStage();
+
+	current->setLength(l);
+
+	return TREE_DONE;
+}
+
+int Tree::incrementWidth(TreeNode *current){
+	float w = current->getWidth();
+	if (w >= (maxWidth - (0.3*current->getStage()))) return TREE_MAX_WIDTH_REACHED;
+
+	w += widthGrowthRate / current->getStage();
+
+	current->setWidth(w);
+	
+	return TREE_DONE;
 }
 
 int Tree::drawAux(TreeNode* node) {
@@ -233,10 +255,10 @@ int Tree::animate(double time){
 		current = q.top();
 		q.pop();
 
-		current->incrementLength(this->lengthGrowthRate);
-		current->incrementWidth(this->widthGrowthRate);
+		incrementLength(current);
+		incrementWidth(current);
 
-		if(current->getLength()>0.5){
+		if(current->getLength()>0.3){
 			if (current->getNodes().size() != 0) {
 				TNlist = current->getNodes();
 				for (it = TNlist.rbegin(); it != TNlist.rend(); it++)

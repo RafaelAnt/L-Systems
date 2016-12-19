@@ -13,13 +13,14 @@ using namespace std;
 #define TREE_NODE_INVALID_VALUE 301
 #define TREE_NODE_INVALID_PRODUCTION_RULE 302
 #define TREE_NODE_UNDIFINED_SYMBOL 303
-#define TREE_NODE_MAX_LENGTH_REACHED 304
-#define TREE_NODE_MAX_WIDTH_REACHED 305
+
 
 class TreeNode {
 	char type;
 	float width;
 	float length;
+	/*float maxLength;
+	float maxWidth;*/
 	int stage;
 	list<TreeNode*> nodes;
 	TreeNode *father;
@@ -37,6 +38,10 @@ public:
 	int setWidth(float newWidth);
 	float getLength();
 	int setLength(float newLength);
+	/*float getMaxWidth();
+	int seMaxtWidth(float newWidth);
+	float getMaxLength();
+	int setMaxLength(float newLength);*/
 	int getStage();
 	int setStage(int newStage);
 	double getCreated();
@@ -50,7 +55,7 @@ public:
 
 	int grow(list<ProductionRule> prodRule);
 	string getLSystem();
-	int incrementLength(float ratio);
-	int incrementWidth(float ratio);
+	/*int incrementLength(float ratio);
+	int incrementWidth(float ratio);*/
 
 };

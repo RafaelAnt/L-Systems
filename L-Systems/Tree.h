@@ -10,6 +10,10 @@
 
 #define TREE_DONE 200
 #define TREE_INVALID_VALUE 201
+#define TREE_MAX_LENGTH_REACHED 202
+#define TREE_MAX_WIDTH_REACHED 203
+
+#define TREE_BRANCH_POINTS 8
 using namespace std;
 
 
@@ -49,4 +53,6 @@ private:
 	int drawAux(TreeNode* node);
 	void rotL();
 	void rotR();
+	int incrementLength(TreeNode *current);
+	int incrementWidth(TreeNode *current);
 };
