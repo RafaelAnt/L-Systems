@@ -127,7 +127,7 @@ int Tree::drawLine(TreeNode * node) {
 
 int Tree::drawIntersection(TreeNode * node){
 	if (node->getBranchNumber() > 1) {
-		glutWireSphere(node->getWidth(), 7, 7);
+		glutSolidSphere(node->getWidth(), 7, 7);
 		//glutSolidSphere(0.45, 7, 7);
 	}
 	return TREE_DONE;
@@ -173,7 +173,7 @@ int Tree::drawBranch(TreeNode * current){
 	glPushMatrix();
 	glRotatef(-90, 1, 0, 0);
 
-	glutWireCone(current->getWidth(), current->getLength(), 5, 5);
+	glutSolidCone(current->getWidth(), current->getLength(), 5, 5);
 
 	glPopMatrix();
 	

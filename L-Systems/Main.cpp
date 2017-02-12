@@ -197,15 +197,28 @@ void glutMain(int argc, char** argv) {
 	// Use depth buffering for hidden surface elimination.
 	glEnable(GL_DEPTH_TEST);
 
+	printf("\n");
+	printf("\n");
+	printf("\n");
+	printf("\t%-20s %s\n", "Graphics Vendor:", glGetString(GL_VENDOR));
+	printf("\t%-20s %s\n", "Renderer:", glGetString(GL_RENDERER));
+	printf("\t%-20s %s\n", "Version:", glGetString(GL_VERSION));
+	//printf("\t%-20s %s\n", "GLSL:", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	
+
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 	glutIdleFunc(animate);
+
+
 
 	glutMainLoop();
 }
 
 int main(int argc, char** argv) {
 	
+
+
 	Parser parser = Parser();
 	list<ProductionRule> pr;
 	

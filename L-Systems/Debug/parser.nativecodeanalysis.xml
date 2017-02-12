@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\rafael\documents\github\l-systems\l-systems\</FILEPATH>
+      <FILENAME>parser.cpp</FILENAME>
+      <LINE>35</LINE>
+      <COLUMN>7</COLUMN>
+    </SFA>
+    <DEFECTCODE>6387</DEFECTCODE>
+    <DESCRIPTION>'r' could be '0':  this does not adhere to the specification for the function 'strcpy'. </DESCRIPTION>
+    <FUNCTION>Parser::getAxiom</FUNCTION>
+    <DECORATED>?getAxiom@Parser@@QAEPADXZ</DECORATED>
+    <FUNCLINE>32</FUNCLINE>
+    <PROBABILITY>1</PROBABILITY>
+    <RANK>4</RANK>
+    <CATEGORY>
+      <RULECATEGORY>mspft</RULECATEGORY>
+    </CATEGORY>
+    <PATH>
+      <SFA>
+        <FILEPATH>c:\users\rafael\documents\github\l-systems\l-systems\</FILEPATH>
+        <FILENAME>parser.cpp</FILENAME>
+        <LINE>33</LINE>
+        <COLUMN>5</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>c:\users\rafael\documents\github\l-systems\l-systems\</FILEPATH>
+        <FILENAME>parser.cpp</FILENAME>
+        <LINE>34</LINE>
+        <COLUMN>6</COLUMN>
+        <KEYEVENT>
+          <ID>1</ID>
+          <KIND>declaration</KIND>
+          <IMPORTANCE>Essential</IMPORTANCE>
+          <MESSAGE>'r' may be NULL</MESSAGE>
+        </KEYEVENT>
+      </SFA>
+      <SFA>
+        <FILEPATH>c:\users\rafael\documents\github\l-systems\l-systems\</FILEPATH>
+        <FILENAME>parser.cpp</FILENAME>
+        <LINE>35</LINE>
+        <COLUMN>7</COLUMN>
+        <KEYEVENT>
+          <ID>2</ID>
+          <KIND>declaration</KIND>
+          <IMPORTANCE>Full</IMPORTANCE>
+          <MESSAGE>'r' is an In/Out argument to 'strcpy' (declared at c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h:119)</MESSAGE>
+        </KEYEVENT>
+      </SFA>
+      <SFA>
+        <FILEPATH>c:\users\rafael\documents\github\l-systems\l-systems\</FILEPATH>
+        <FILENAME>parser.cpp</FILENAME>
+        <LINE>35</LINE>
+        <COLUMN>7</COLUMN>
+        <KEYEVENT>
+          <ID>3</ID>
+          <KIND>usage</KIND>
+          <IMPORTANCE>Essential</IMPORTANCE>
+          <MESSAGE>'r' should not be NULL, because this is not consistent with the SAL annotation on 'strcpy'</MESSAGE>
+        </KEYEVENT>
+      </SFA>
+    </PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\rafael\documents\github\l-systems\l-systems\</FILEPATH>
+      <FILENAME>parser.cpp</FILENAME>
+      <LINE>79</LINE>
+      <COLUMN>13</COLUMN>
+    </SFA>
+    <DEFECTCODE>6330</DEFECTCODE>
+    <DESCRIPTION>'char' passed as _Param_(1) when 'unsigned char' is required in call to 'isalpha'.</DESCRIPTION>
+    <FUNCTION>Parser::separate</FUNCTION>
+    <DECORATED>?separate@Parser@@AAEHPAD0PAPAD@Z</DECORATED>
+    <FUNCLINE>63</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\rafael\documents\github\l-systems\l-systems\</FILEPATH>
+      <FILENAME>parser.cpp</FILENAME>
+      <LINE>289</LINE>
+      <COLUMN>15</COLUMN>
+    </SFA>
+    <DEFECTCODE>6330</DEFECTCODE>
+    <DESCRIPTION>'char' passed as _Param_(1) when 'unsigned char' is required in call to 'isdigit'.</DESCRIPTION>
+    <FUNCTION>Parser::hasInvalidChar</FUNCTION>
+    <DECORATED>?hasInvalidChar@Parser@@AAE_NHPAD@Z</DECORATED>
+    <FUNCLINE>272</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+</DEFECTS>
