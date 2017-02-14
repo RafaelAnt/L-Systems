@@ -21,6 +21,7 @@ class TreeNode {
 	float length;
 	/*float maxLength;
 	float maxWidth;*/
+	float degree;
 	int stage;
 	list<TreeNode*> nodes;
 	TreeNode *father;
@@ -38,6 +39,8 @@ public:
 	int setWidth(float newWidth);
 	float getLength();
 	int setLength(float newLength);
+	float getDegree();
+	int setDegree(float newDegree);
 	/*float getMaxWidth();
 	int seMaxtWidth(float newWidth);
 	float getMaxLength();
@@ -46,8 +49,6 @@ public:
 	int setStage(int newStage);
 	double getCreated();
 	int setCreated(double time);
-	/*float getAngle();
-	void setAngle(float newAngle);*/
 	list<TreeNode*> getNodes();
 	void addNode(TreeNode* node);
 	TreeNode* getFather();

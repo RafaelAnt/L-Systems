@@ -6,6 +6,7 @@ TreeNode::TreeNode(){
 	this->type = '0';
 	width = -1;
 	length = -1;
+	degree = 1;
 	/*maxWidth = 1;
 	maxLength = 1;*/
 	stage = -1;
@@ -21,6 +22,7 @@ TreeNode::TreeNode(char type, TreeNode* father){
 	this->type = type;
 	width = 0;
 	length = 0;
+	degree = 1;
 	/*maxWidth = 1;
 	maxLength = 1;*/
 	stage = 1;
@@ -52,6 +54,7 @@ TreeNode::TreeNode(char type, TreeNode * father, int stage){
 	this->type = type;
 	width = 0;
 	length = 0;
+	degree = 1;
 	/*maxWidth = 1;
 	maxLength = 1;*/
 	this->stage = stage;
@@ -70,6 +73,7 @@ TreeNode::TreeNode(const TreeNode &node) {
 	this->type = node.type;
 	this->width = node.width;
 	this->length = node.length;
+	this->degree = node.degree;
 	this->stage = node.stage;
 	this->nodes = list<TreeNode*>(node.nodes);
 	this->color[0] = node.color[0];
@@ -104,6 +108,15 @@ int TreeNode::setLength(float newLength){
 		return TREE_NODE_INVALID_VALUE;
 	}
 	length = newLength;
+	return TREE_NODE_DONE;
+}
+
+float TreeNode::getDegree(){
+	return this->degree;
+}
+
+int TreeNode::setDegree(float newDegree){
+	this->degree = newDegree;
 	return TREE_NODE_DONE;
 }
 

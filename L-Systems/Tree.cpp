@@ -7,15 +7,17 @@ Tree::Tree(){
 	maxWidth = -1;
 	lengthGrowthRate = -1;
 	widthGrowthRate = -1;
+	angleGrowthRate = -1;
 }
 
-Tree::Tree(string axiom, list<ProductionRule> prods,float maxLength, float maxWidth, float lengthGrowthRate, float widthGrowthRate, float angle){
+Tree::Tree(string axiom, list<ProductionRule> prods,float maxLength, float maxWidth, float lengthGrowthRate, float widthGrowthRate, float angleGrowthRate, float angle){
 	//printf("Usei o bom\n");
 	productionRules = list<ProductionRule>(prods);
 	this->maxLength = maxLength;
 	this->maxWidth = maxWidth;
 	this->lengthGrowthRate = lengthGrowthRate;
 	this->widthGrowthRate = widthGrowthRate;
+	this->angleGrowthRate = angleGrowthRate;
 	this->angle = angle;
 
 	TreeNode *aux;
@@ -72,6 +74,16 @@ float Tree::getLenghGrowthRate(){
 int Tree::setLengthGrowthRate(float rate){
 	if (rate <= 0) return TREE_INVALID_VALUE;
 	this->lengthGrowthRate = rate;
+	return TREE_DONE;
+}
+
+float Tree::getAngleGrowthRate(){
+	return angleGrowthRate;
+}
+
+int Tree::setAngleGrowthRate(float rate){
+	if (rate <= 0) return TREE_INVALID_VALUE;
+	this->angleGrowthRate = rate;
 	return TREE_DONE;
 }
 
@@ -133,16 +145,16 @@ int Tree::drawIntersection(TreeNode * node){
 	return TREE_DONE;
 }
 
-void Tree::rotL() {
-	glRotatef(this->angle, 1, 0, 0);
-	glRotatef(this->angle, 0, 1, 0);
-	glRotatef(this->angle, 0, 0, 1);
+void Tree::rotL(TreeNode* node) {
+	glRotatef(node->getDegree(), 1, 0, 0);
+	glRotatef(node->getDegree(), 0, 1, 0);
+	glRotatef(node->getDegree(), 0, 0, 1);
 }
 
-void Tree::rotR() {
-	glRotatef(-this->angle, 1, 0, 0);
-	glRotatef(this->angle, 0, 1, 0);
-	glRotatef(-this->angle, 0, 0, 1);
+void Tree::rotR(TreeNode* node) {
+	glRotatef(-node->getDegree(), 1, 0, 0);
+	glRotatef(node->getDegree(), 0, 1, 0);
+	glRotatef(-node->getDegree(), 0, 0, 1);
 }
 
 int Tree::incrementLength(TreeNode *current){
@@ -164,6 +176,17 @@ int Tree::incrementWidth(TreeNode *current){
 
 	current->setWidth(w);
 	
+	return TREE_DONE;
+}
+
+int Tree::incrementDegree(TreeNode * current){
+	float a = current->getDegree();
+	if (a >= (angle - (0.05*current->getStage()))) return TREE_MAX_ANGLE_REACHED;
+
+	a += angleGrowthRate / current->getStage();
+
+	current->setDegree(a);
+
 	return TREE_DONE;
 }
 
@@ -196,10 +219,10 @@ int Tree::drawAux(TreeNode* node) {
 		}
 		break;
 	case '+':
-		rotR();
+		rotR(node);
 		break;
 	case '-':
-		rotL();
+		rotL(node);
 		break;
 	default:
 		break;
@@ -284,6 +307,7 @@ int Tree::animate(double time){
 
 		incrementLength(current);
 		incrementWidth(current);
+		incrementDegree(current);
 
 		if(current->getLength()>0.3){
 			if (current->getNodes().size() != 0) {
