@@ -12,6 +12,7 @@
 #define TREE_INVALID_VALUE 201
 #define TREE_MAX_LENGTH_REACHED 202
 #define TREE_MAX_WIDTH_REACHED 203
+#define TREE_MAX_ANGLE_REACHED 204
 
 #define TREE_BRANCH_POINTS 8
 using namespace std;
@@ -23,11 +24,12 @@ class Tree {
 	float maxWidth;
 	float lengthGrowthRate;
 	float widthGrowthRate;
+	float angleGrowthRate;
 	float angle;
 
 public:
 	Tree();
-	Tree(string axiom, list<ProductionRule> prods, float maxLength, float maxWidth, float lengthGrowthRate, float widthGrowthRate, float angle);
+	Tree(string axiom, list<ProductionRule> prods, float maxLength, float maxWidth, float lengthGrowthRate, float widthGrowthRate, float angleGrowthRate, float angle);
 
 	TreeNode getStart();
 	int setStart(TreeNode start);
@@ -37,6 +39,8 @@ public:
 	int setMaxWidth(float width);
 	float getLenghGrowthRate();
 	int setLengthGrowthRate(float rate);
+	float getAngleGrowthRate();
+	int setAngleGrowthRate(float rate);
 	float getWidthGrowthRate();
 	int setWidthGrowthRate(float rate);
 
@@ -50,10 +54,11 @@ public:
 
 private:
 	int drawAux(TreeNode* node);
-	void rotL();
-	void rotR();
+	void rotL(TreeNode* node);
+	void rotR(TreeNode* node);
 	int incrementLength(TreeNode *current);
 	int incrementWidth(TreeNode *current);
+	int incrementDegree(TreeNode *current);
 	int drawBranch(TreeNode *current);
 	int drawLine(TreeNode *node);
 	int drawIntersection(TreeNode* node);

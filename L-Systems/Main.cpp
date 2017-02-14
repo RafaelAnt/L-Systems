@@ -270,8 +270,8 @@ int main(int argc, char** argv) {
 
 	degree = parser.getDegree();
 
-	//				Axioma			prod Rules,				maxLenght, maxWidth, lenght rate, width rate, angulo; 
-	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1.3, 0.4, 0.01, 0.0005, degree);
+	//				Axioma			prod Rules,				maxLenght, maxWidth, lenght rate, width rate, degree rate, angulo; 
+	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1.3, 0.4, 0.01, 0.0005, 0.05, degree);
 	
 	r = plant.grow(EXPANSIONS_NUMBER);
 	if (r != TREE_DONE) {
