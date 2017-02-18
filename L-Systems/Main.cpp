@@ -18,28 +18,23 @@ double lastTime = 0, elapsedTime = 0, lastElapsedTime = 0;
 
 float degree = 0;
 
-float eyeX = 30;
-float eyeY = 30;
+//Camera Variables
+float eyeX = 0;
+float eyeY = 0;
 float eyeZ = 0;
 float lookX = 0;
 float lookY = 10;
 float lookZ = 0;
 float camAng = 0;
+float alpha = 0;
+float beta = 0;
+float dist = 30;
 
 //int growNumber = 1;
 //int stage=0;
 
 string expanded;
 Tree plant;
-
-
-/*int getTotalLines() {
-	int r=0;
-	for (int i = 0; i < EXPANSIONS_NUMBER; i++) {
-		r += linesNumber[i];
-	}
-	return r;
-}*/
 
 
 void display(void) {
@@ -54,13 +49,23 @@ void display(void) {
 
 	//float axisDist = 10;
 
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+
+	if (alpha > 2 * PI) alpha = 0;
+	if (beta > PI / 2) beta = PI / 2;
+	//if (beta < -PI / 2) beta = -PI / 2;
+	if (beta < 0.05) beta = 0.05;
+
+	eyeX = dist * cos(beta) * sin(alpha);
+	eyeY = dist * sin(beta);
+	eyeZ = dist * cos(beta) * cos(alpha);
 
 	gluLookAt(eyeX, eyeY, eyeZ, lookX, lookY, lookZ, 0, 1, 0);
 	
-	//glPushMatrix();
 	//EIXOS
-	//glLineWidth(1);
-	/*glBegin(GL_LINES);           
+	/*glPushMatrix();
+	glLineWidth(1);
+	glBegin(GL_LINES);           
 	// draw line for x axis red
 	glColor3f(1.0, 0.0, 0.0);
 	glVertex3f(0.0, 0.0, 0.0);
@@ -185,6 +190,32 @@ void keyboard(unsigned char key, int x, int y){
 	}
 }
 
+float mouseX = 0;
+float mouseY = 0;
+
+void mouseMotion(int x, int y) {
+	float Xfinal = x - mouseX;
+	float Yfinal = y - mouseY;
+
+	//printf("X: %f, Y: %f \n",Xfinal,Yfinal);
+
+	alpha = alpha + 0.005 * Xfinal;
+	beta = beta - 0.005 * Yfinal;
+
+	mouseX = x;
+	mouseY = y;
+
+	glutPostRedisplay();
+}
+
+
+void mouse(int botão, int estado, int x, int y) {
+	if (botão == GLUT_LEFT_BUTTON && estado == GLUT_DOWN) {
+		mouseX = x;
+		mouseY = y;
+	}
+}
+
 void glutMain(int argc, char** argv) {
 
 	glutInit(&argc, argv);
@@ -210,7 +241,11 @@ void glutMain(int argc, char** argv) {
 	glutKeyboardFunc(keyboard);
 	glutIdleFunc(animate);
 
+	// Mouse Functions
+	glutMotionFunc(mouseMotion);
+	glutMouseFunc(mouse);
 
+	
 
 	glutMainLoop();
 }
