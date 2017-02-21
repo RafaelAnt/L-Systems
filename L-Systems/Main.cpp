@@ -60,7 +60,7 @@ void display(void) {
 	eyeY = dist * sin(beta);
 	eyeZ = dist * cos(beta) * cos(alpha);
 
-	gluLookAt(eyeX, eyeY, eyeZ, lookX, lookY, lookZ, 0, 1, 0);
+	gluLookAt(eyeX + lookX, eyeY + lookY, eyeZ + lookZ, lookX, lookY, lookZ, 0, 1, 0);
 	
 	//EIXOS
 	/*glPushMatrix();
@@ -144,25 +144,29 @@ void keyboard(unsigned char key, int x, int y){
 		break;
 
 	case 'w':
-		eyeY += 1;
+		dist--;
+		if (dist <= 0) {
+			dist == 1;
+		}
 		break;
 
 	case 'a':
-		if (camAng <= 0) camAng = 360;
+		/*if (camAng <= 0) camAng = 360;
 		else camAng--;
 		eyeX = 20 * sin(camAng*PI / 180);
-		eyeZ = 20 * cos(camAng*PI / 180);
+		eyeZ = 20 * cos(camAng*PI / 180);*/
 		break;
 
 	case 's':
-		eyeY -= 1;
+		dist++;
+
 		break;
 
 	case 'd':
-		if (camAng >= 360) camAng = 1;
+		/*if (camAng >= 360) camAng = 1;
 		else camAng++;
 		eyeX = 20 * sin(camAng*PI / 180);
-		eyeZ = 20 * cos(camAng*PI / 180);
+		eyeZ = 20 * cos(camAng*PI / 180);*/
 		break;
 
 	case '+':
@@ -207,7 +211,6 @@ void mouseMotion(int x, int y) {
 
 	glutPostRedisplay();
 }
-
 
 void mouse(int botão, int estado, int x, int y) {
 	if (botão == GLUT_LEFT_BUTTON && estado == GLUT_DOWN) {

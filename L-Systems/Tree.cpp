@@ -193,10 +193,12 @@ int Tree::incrementDegree(TreeNode * current){
 int Tree::drawBranch(TreeNode * current){
 	//current->getWidth()
 
-	glPushMatrix();
-	glRotatef(-90, 1, 0, 0);
+	//TODO: check and fix!
 
-	glutSolidCone(current->getWidth(), current->getLength(), 5, 5);
+	glPushMatrix();
+	//glRotatef(-90, 1, 0, 0);
+
+	//glutSolidCone(current->getWidth(), current->getLength(), 5, 5);
 
 	glPopMatrix();
 	

@@ -4,8 +4,10 @@
 #include <list>
 #include <time.h>
 #include <Windows.h>
+#include <vector>
 
 #include "ProductionRule.h"
+#include "Point.h"
 
 using namespace std;
 
@@ -24,6 +26,7 @@ class TreeNode {
 	float degree;
 	int stage;
 	list<TreeNode*> nodes;
+	vector<Point> basePoints;
 	TreeNode *father;
 	float color[3];
 	double created;
