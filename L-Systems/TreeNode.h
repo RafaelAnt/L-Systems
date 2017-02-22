@@ -26,7 +26,7 @@ class TreeNode {
 	float degree;
 	int stage;
 	list<TreeNode*> nodes;
-	vector<Point> basePoints;
+	vector<Point> circlePoints;
 	TreeNode *father;
 	float color[3];
 	double created;
@@ -54,9 +54,12 @@ public:
 	int setCreated(double time);
 	list<TreeNode*> getNodes();
 	void addNode(TreeNode* node);
+	vector<Point> getCirclePoints();
+	int setCirclePoints(vector<Point> points);
 	TreeNode* getFather();
 	int setFather(TreeNode *newFather);
 
+	//int addPoint(Point p);
 	int grow(list<ProductionRule> prodRule);
 	string getLSystem();
 	/*int incrementLength(float ratio);

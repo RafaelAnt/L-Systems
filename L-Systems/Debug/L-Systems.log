@@ -1,4 +1,2 @@
-﻿  Main.cpp
-c:\users\rafael\documents\github\l-systems\l-systems\main.cpp(149): warning C4553: '==': operator has no effect; did you intend '='?
-  L-Systems.vcxproj -> C:\Users\Rafael\Documents\GitHub\L-Systems\Debug\L-Systems.exe
+﻿  L-Systems.vcxproj -> C:\Users\Rafael\Documents\GitHub\L-Systems\Debug\L-Systems.exe
   L-Systems.vcxproj -> C:\Users\Rafael\Documents\GitHub\L-Systems\Debug\L-Systems.pdb (Full PDB)

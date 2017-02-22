@@ -190,15 +190,25 @@ int Tree::incrementDegree(TreeNode * current){
 	return TREE_DONE;
 }
 
-int Tree::drawBranch(TreeNode * current){
-	//current->getWidth()
-
-	//TODO: check and fix!
-
+int Tree::drawBranch(TreeNode * current){ //TODO: check and fix!
+	
 	glPushMatrix();
-	//glRotatef(-90, 1, 0, 0);
-
+	//glRotatef(-90, 1, 0, 0); //rotate the cone
 	//glutSolidCone(current->getWidth(), current->getLength(), 5, 5);
+
+	glBegin(GL_TRIANGLE_STRIP);
+	for (float i = 0; i < 2 * 3.14; i += 0.5) {
+		//glColor3f(0.5, 0.5, 0.5);
+		glNormal3f(sin(i),0.0,cos(i));
+		glVertex3f(current->getWidth()*sin(i), current->getLength(), current->getWidth()*cos(i));
+		glNormal3f(sin(i), 0.0, cos(i));
+		glVertex3f(current->getWidth()*sin(i), 0, current->getWidth()*cos(i));
+	}
+	glNormal3f(sin(0), 0.0, cos(0));
+	glVertex3f(current->getWidth()*sin(0.0), current->getLength(), current->getWidth()*cos(0.0));
+	glNormal3f(sin(0), 0.0, cos(0));
+	glVertex3f(current->getWidth()*sin(0.0), 0, current->getWidth()*cos(0.0));
+	glEnd();
 
 	glPopMatrix();
 	
@@ -209,6 +219,7 @@ int Tree::drawAux(TreeNode* node) {
 	list<TreeNode*>::iterator it;
 	list<TreeNode*> nodes = node->getNodes();
 	TreeNode* aux;
+	int r;
 
 	//Rotate if needed
 	switch (node->getType()){
@@ -241,7 +252,8 @@ int Tree::drawAux(TreeNode* node) {
 			if (aux->getStage() > node->getStage()) {
 				glPushMatrix();
 			}
-			drawAux(aux);
+			r = drawAux(aux);
+			if (r != TREE_DONE) return r;
 			if (aux->getStage() > node->getStage()) {
 				glPopMatrix();
 			}
@@ -264,7 +276,8 @@ string Tree::getLSystem(){
 	return start.getLSystem();
 }
 
-void Tree::teste(){
+//TODO: Remove
+/*void Tree::teste(){
 	printf("\n\n\nTESTE\n\nNumero de filhos:\n");
 
 	
@@ -292,8 +305,8 @@ void Tree::teste(){
 		}
 	}
 	
-
-}
+	
+}*/
 
 int Tree::animate(double time){
 	TreeNode *current;
@@ -302,6 +315,8 @@ int Tree::animate(double time){
 	stack<TreeNode*> q;
 
 	q.push(&start);
+
+	// TODO: Change the angle to make it blow in the wind
 
 	while (!q.empty()) {
 		current = q.top();

@@ -47,7 +47,7 @@ public:
 	int grow(int number);
 	int draw();
 	string getLSystem();
-	void teste();
+	//void teste();
 	int animate(double time);
 	int reset();
 

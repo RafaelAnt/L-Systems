@@ -177,12 +177,21 @@ void TreeNode::addNode(TreeNode* node){
 	nodes.push_back(node);
 }
 
+vector<Point> TreeNode::getCirclePoints(){
+	return circlePoints;
+}
+
+int TreeNode::setCirclePoints(vector<Point> points){
+	this->circlePoints = points;
+	return TREE_NODE_DONE;
+}
+
 TreeNode * TreeNode::getFather(){
 	return father;
 }
 
 int TreeNode::setFather(TreeNode * newFather){
-	if (newFather = nullptr) return TREE_NODE_INVALID_VALUE;
+	if (newFather == nullptr) return TREE_NODE_INVALID_VALUE;
 	this->father = newFather;
 	return TREE_NODE_DONE;
 }
