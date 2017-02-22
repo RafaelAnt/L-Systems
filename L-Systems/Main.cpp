@@ -18,13 +18,16 @@ double lastTime = 0, elapsedTime = 0, lastElapsedTime = 0;
 
 float degree = 0;
 
-float eyeX = 30;
-float eyeY = 30;
+//Camera Variables
+float eyeX = 0;
+float eyeY = 0;
 float eyeZ = 0;
 float lookX = 0;
 float lookY = 10;
 float lookZ = 0;
-float camAng = 0;
+float alpha = 0;
+float beta = 0;
+float dist = 30;
 
 //int growNumber = 1;
 //int stage=0;
@@ -32,19 +35,20 @@ float camAng = 0;
 string expanded;
 Tree plant;
 
-
-/*int getTotalLines() {
-	int r=0;
-	for (int i = 0; i < EXPANSIONS_NUMBER; i++) {
-		r += linesNumber[i];
-	}
-	return r;
-}*/
-
+//lighting
+GLfloat global_ambient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+GLfloat ambientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+GLfloat diffuseLight[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+GLfloat specularLight[] = { 0.2f, 0.2f, 0.2f, 0.5f };
+GLfloat position[] = { -15.0f, 50.0f, -40.0f, 1.0f };
+//GLfloat specReflection[] {0.8f,0.8f,0.8f,1.0f};
 
 void display(void) {
+	int result;
+
 	// start by clearing the screen and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glShadeModel(GL_SMOOTH);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	float fieldOfView = 60;
@@ -54,13 +58,24 @@ void display(void) {
 
 	//float axisDist = 10;
 
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 
-	gluLookAt(eyeX, eyeY, eyeZ, lookX, lookY, lookZ, 0, 1, 0);
+	if (alpha > 2 * PI) alpha = 0;
+	if (beta > PI / 2) beta = PI / 2;
+	//if (beta < -PI / 2) beta = -PI / 2;
+	if (beta < 0.05) beta = 0.05;
+
+	eyeX = dist * cos(beta) * sin(alpha);
+	eyeY = dist * sin(beta);
+	eyeZ = dist * cos(beta) * cos(alpha);
+
+	glLightfv(GL_LIGHT0, GL_POSITION, position);
+	gluLookAt(eyeX + lookX, eyeY + lookY, eyeZ + lookZ, lookX, lookY, lookZ, 0, 1, 0);
 	
-	//glPushMatrix();
 	//EIXOS
-	//glLineWidth(1);
-	/*glBegin(GL_LINES);           
+	/*glPushMatrix();
+	glLineWidth(1);
+	glBegin(GL_LINES);           
 	// draw line for x axis red
 	glColor3f(1.0, 0.0, 0.0);
 	glVertex3f(0.0, 0.0, 0.0);
@@ -79,33 +94,40 @@ void display(void) {
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	//saves current lighting stuff
-	glPushAttrib(GL_LIGHTING_BIT); 
+	//glPushAttrib(GL_LIGHTING_BIT); 
 	// ambient reflection
-	GLfloat ambient[4] = { 0.82f, 0.41f, 0.12f }; 
+	//GLfloat ambient[4] = { 0.82f, 0.41f, 0.12f }; 
 	// diffuse reflection  
-	GLfloat diffuse[4] = { 0.82f, 0.41f, 0.12f };
+	//GLfloat diffuse[4] = { 0.82f, 0.41f, 0.12f };
 	// set the ambient reflection for the object
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
 	// set the diffuse reflection for the object
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 
 	// Floor
 	glBegin(GL_TRIANGLES);
-		glColor3f(1.0, 0, 0);
+		glColor3f(0.5, 0.1, 0.5);
+		glNormal3f(0.0, 1.0, 0.0);
 		glVertex3f(-10, 0, -10);
+		glNormal3f(0.0, 1.0, 0.0);
+		glVertex3f(10, 0, 10);
+		glNormal3f(0.0, 1.0, 0.0);
 		glVertex3f(10, 0, -10);
-		glVertex3f(10, 0, 10);
+		glNormal3f(0.0, 1.0, 0.0);
 		glVertex3f(-10, 0, 10);
-		glVertex3f(-10, 0, -10);
+		glNormal3f(0.0, 1.0, 0.0);
 		glVertex3f(10, 0, 10);
+		glNormal3f(0.0, 1.0, 0.0);
+		glVertex3f(-10, 0, -10);
 	glEnd();
 
 	glPopMatrix();
-	glPopAttrib();
+	//glPopAttrib();
 	glColor3f(0, 1, 0);
 
 	// Tree
-	if (plant.draw() != TREE_DONE) {
+	result = plant.draw();
+	if (result != TREE_DONE) {
 		printf("Fatal Error!\n");
 		exit(0);
 	}
@@ -119,8 +141,6 @@ void animate() {
 	if (lastTime == 0) lastTime = timeGetTime();
 		
 	elapsedTime = timeGetTime() - lastTime;
-
-	// TODO: Change the angle to make it blow in the wind
 
 	if (plant.animate(elapsedTime) != TREE_DONE) {
 		printf("Fatal Error!\n");
@@ -139,25 +159,29 @@ void keyboard(unsigned char key, int x, int y){
 		break;
 
 	case 'w':
-		eyeY += 1;
+		dist--;
+		if (dist <= 0) {
+			dist = 1;
+		}
 		break;
 
 	case 'a':
-		if (camAng <= 0) camAng = 360;
+		/*if (camAng <= 0) camAng = 360;
 		else camAng--;
 		eyeX = 20 * sin(camAng*PI / 180);
-		eyeZ = 20 * cos(camAng*PI / 180);
+		eyeZ = 20 * cos(camAng*PI / 180);*/
 		break;
 
 	case 's':
-		eyeY -= 1;
+		dist++;
+
 		break;
 
 	case 'd':
-		if (camAng >= 360) camAng = 1;
+		/*if (camAng >= 360) camAng = 1;
 		else camAng++;
 		eyeX = 20 * sin(camAng*PI / 180);
-		eyeZ = 20 * cos(camAng*PI / 180);
+		eyeZ = 20 * cos(camAng*PI / 180);*/
 		break;
 
 	case '+':
@@ -182,6 +206,31 @@ void keyboard(unsigned char key, int x, int y){
 
 	default:
 		break;
+	}
+}
+
+float mouseX = 0;
+float mouseY = 0;
+
+void mouseMotion(int x, int y) {
+	float Xfinal = x - mouseX;
+	float Yfinal = y - mouseY;
+
+	//printf("X: %f, Y: %f \n",Xfinal,Yfinal);
+
+	alpha = alpha + 0.005 * Xfinal;
+	beta = beta - 0.005 * Yfinal;
+
+	mouseX = x;
+	mouseY = y;
+
+	glutPostRedisplay();
+}
+
+void mouse(int botão, int estado, int x, int y) {
+	if (botão == GLUT_LEFT_BUTTON && estado == GLUT_DOWN) {
+		mouseX = x;
+		mouseY = y;
 	}
 }
 
@@ -210,7 +259,23 @@ void glutMain(int argc, char** argv) {
 	glutKeyboardFunc(keyboard);
 	glutIdleFunc(animate);
 
+	// Mouse Functions
+	glutMotionFunc(mouseMotion);
+	glutMouseFunc(mouse);
 
+	// alguns settings para OpenGL
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_COLOR_MATERIAL);
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+	glEnable(GL_LIGHT0);
+
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+	//glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
+	glLightfv(GL_LIGHT0, GL_POSITION, position);
 
 	glutMainLoop();
 }
@@ -270,8 +335,8 @@ int main(int argc, char** argv) {
 
 	degree = parser.getDegree();
 
-	//				Axioma			prod Rules,				maxLenght, maxWidth, lenght rate, width rate, degree rate, angulo; 
-	plant = Tree(parser.getAxiom(), parser.getProductionRules(), 1.3, 0.4, 0.01, 0.0005, 0.05, degree);
+	//			 Axiom					production Rules,				maxLenght,	 maxWidth,	lenght rate,	width rate,		degree rate,	maxDegree; 
+	plant = Tree(parser.getAxiom(),		parser.getProductionRules(),	1.1,		 0.25,		0.01,			0.0001,			0.07,			degree		);
 	
 	r = plant.grow(EXPANSIONS_NUMBER);
 	if (r != TREE_DONE) {
