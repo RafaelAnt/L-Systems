@@ -61,9 +61,9 @@ void display(void) {
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 
 	if (alpha > 2 * PI) alpha = 0;
+	if (alpha < 0) alpha = 2 * PI;
 	if (beta > PI / 2) beta = PI / 2;
-	//if (beta < -PI / 2) beta = -PI / 2;
-	if (beta < 0.05) beta = 0.05;
+	if (beta < -0.3) beta = -0.3;
 
 	eyeX = dist * cos(beta) * sin(alpha);
 	eyeY = dist * sin(beta);
