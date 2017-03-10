@@ -4,9 +4,11 @@
 #include <stdio.h>
 #include <GL/glut.h>
 #include <stack> 
+#include <deque>
 
 #include "ProductionRule.h"
 #include "TreeNode.h"
+#include "Point.h"
 
 #define TREE_DONE 200
 #define TREE_INVALID_VALUE 201
@@ -26,6 +28,7 @@ class Tree {
 	float widthGrowthRate;
 	float angleGrowthRate;
 	float angle;
+	deque<Point*> currentPoints;
 
 public:
 	Tree();

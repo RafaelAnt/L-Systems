@@ -31,6 +31,9 @@ class TreeNode {
 	float color[3];
 	double created;
 
+
+	
+
 public:
 	TreeNode();
 	TreeNode(char type, TreeNode* father);

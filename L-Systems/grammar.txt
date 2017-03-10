@@ -9,6 +9,7 @@ F=FF-[-F+F]+[+F-F]
 X=FF+[+F]+[-F]
 #END
 
+% Others:
 
 #AXIOM
 F

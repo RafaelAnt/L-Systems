@@ -1,5 +1,8 @@
 #include "Tree.h"
 
+//TODO: Change to Dynamic
+
+
 Tree::Tree(){
 	//printf("Usei o mau\n");
 	start = TreeNode();
@@ -19,7 +22,6 @@ Tree::Tree(string axiom, list<ProductionRule> prods,float maxLength, float maxWi
 	this->widthGrowthRate = widthGrowthRate;
 	this->angleGrowthRate = angleGrowthRate;
 	this->angle = angle;
-
 	TreeNode *aux;
 
 	char ch = axiom.at(0);
@@ -110,7 +112,7 @@ int Tree::grow(int number){
 }
 
 int Tree::drawLine(TreeNode * node) {
-	glPushAttrib(GL_LIGHTING_BIT);//saves current lighting stuff
+	/*glPushAttrib(GL_LIGHTING_BIT);//saves current lighting stuff
 
 	GLfloat ambient[4] = { 0.55f, 0.27f, 0.07f };    // ambient reflection
 	GLfloat specular[4] = { 0.55f, 0.27f, 0.07f };   // specular reflection
@@ -121,7 +123,7 @@ int Tree::drawLine(TreeNode * node) {
 	// set the diffuse reflection for the object
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 	// set the specular reflection for the object      
-	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);*/
 
 	glLineWidth(0.5);
 
@@ -131,7 +133,7 @@ int Tree::drawLine(TreeNode * node) {
 	glEnd();
 	//glTranslatef(0, node->getLength(), 0);
 	
-	glPopAttrib();
+	//glPopAttrib();
 
 	return TREE_DONE;
 }
@@ -140,7 +142,6 @@ int Tree::drawLine(TreeNode * node) {
 int Tree::drawIntersection(TreeNode * node){
 	if (node->getBranchNumber() > 1) {
 		glutSolidSphere(node->getWidth(), 7, 7);
-		//glutSolidSphere(0.45, 7, 7);
 	}
 	return TREE_DONE;
 }
@@ -192,15 +193,30 @@ int Tree::incrementDegree(TreeNode * current){
 
 int Tree::drawBranch(TreeNode * current){ //TODO: check and fix!
 	
-	glPushMatrix();
+	//glPushMatrix();
 	//glRotatef(-90, 1, 0, 0); //rotate the cone
 	//glutSolidCone(current->getWidth(), current->getLength(), 5, 5);
 
-	glBegin(GL_TRIANGLE_STRIP);
+	if(current->getStage() == 1){
+		GLfloat modelMatrix[16];
+		glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
+
+		/*printf("\n");
+		printf("\n");
+		for (int i = 0; i < 16; i++) {
+			printf("%f  ", (float)modelMatrix[i]);
+			if (i == 3 || i == 7 || i == 11) printf("\n");
+		}
+		printf("\n");*/
+		Point * currentPoint = new Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
+		currentPoints.push_back(currentPoint);
+	}
+
+	/*glBegin(GL_TRIANGLE_STRIP);
 	for (float i = 0; i < 2 * 3.14; i += 0.5) {
 		//glColor3f(0.5, 0.5, 0.5);
 		glNormal3f(sin(i),0.0,cos(i));
-		glVertex3f(current->getWidth()*sin(i), current->getLength(), current->getWidth()*cos(i));
+		glVertex3f(current->getWidth()*sin(i)s, current->getLength(), current->getWidth()*cos(i));
 		glNormal3f(sin(i), 0.0, cos(i));
 		glVertex3f(current->getWidth()*sin(i), 0, current->getWidth()*cos(i));
 	}
@@ -208,9 +224,9 @@ int Tree::drawBranch(TreeNode * current){ //TODO: check and fix!
 	glVertex3f(current->getWidth()*sin(0.0), current->getLength(), current->getWidth()*cos(0.0));
 	glNormal3f(sin(0), 0.0, cos(0));
 	glVertex3f(current->getWidth()*sin(0.0), 0, current->getWidth()*cos(0.0));
-	glEnd();
+	glEnd();*/
 
-	glPopMatrix();
+	//glPopMatrix();
 	
 	return TREE_DONE;
 }
@@ -225,7 +241,7 @@ int Tree::drawAux(TreeNode* node) {
 	switch (node->getType()){
 	case 'F':
 		if (node->getLength() > 0) {
-			drawLine(node);
+			//drawLine(node);
 			drawBranch(node);
 			glTranslatef(0, node->getLength(), 0);
 			drawIntersection(node);
@@ -268,7 +284,15 @@ int Tree::drawAux(TreeNode* node) {
 int Tree::draw(){
 
 	int r = drawAux(&start);
-
+	glLineWidth(0.5);
+	glBegin(GL_LINES);
+		glVertex3f(0, 0, 0);
+		if(currentPoints.size() > 0) printf("Last Point is: %f %f %f\n", currentPoints.back()->x, currentPoints.back()->y, currentPoints.back()->z);
+		while (currentPoints.size() > 0) {
+			glVertex3fv(currentPoints.front()->toVec3f());
+			currentPoints.pop_front();
+		}
+	glEnd();
 	return r;
 }
 

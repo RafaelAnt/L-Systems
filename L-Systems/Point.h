@@ -1,6 +1,5 @@
 #pragma once
 
-
 using namespace std;
 
 #define POINT_DONE 400
@@ -14,6 +13,8 @@ public:
 	Point();
 	Point(float x, float y, float z);
 	~Point();
+
+	float * toVec3f();
 
 
 private:
