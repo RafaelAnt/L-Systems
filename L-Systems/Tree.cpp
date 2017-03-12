@@ -191,6 +191,26 @@ int Tree::incrementDegree(TreeNode * current){
 	return TREE_DONE;
 }
 
+bool isLastFromStage(TreeNode * current) {
+	int stage = current->getStage();
+	list<TreeNode*> nodes = current->getNodes();
+	list<TreeNode*>::iterator it;
+	TreeNode * aux;
+
+
+	if (nodes.size() == 0) return true;
+
+	for (it = nodes.begin(); it != nodes.end(); it++) {
+		aux = *it;
+		if ((aux->getType() == '+' || aux->getType() == '-') && aux->getStage() == stage) {
+			if (!isLastFromStage(aux)) return false;
+		}
+		if (aux->getType() == 'F' && aux->getStage() == stage && aux->getLength() > 0) return false;
+	}
+
+	return true;
+}
+
 int Tree::drawBranch(TreeNode * current){ //TODO: check and fix!
 	
 	//glPushMatrix();
@@ -210,6 +230,15 @@ int Tree::drawBranch(TreeNode * current){ //TODO: check and fix!
 		printf("\n");*/
 		Point * currentPoint = new Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
 		currentPoints.push_back(currentPoint);
+
+		if (isLastFromStage(current)) {
+			glPushMatrix();
+			glTranslatef(0, current->getLength(), 0);
+			glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
+			Point * currentPoint = new Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
+			currentPoints.push_back(currentPoint);
+			glPopMatrix();
+		}
 	}
 
 	/*glBegin(GL_TRIANGLE_STRIP);
@@ -283,11 +312,13 @@ int Tree::drawAux(TreeNode* node) {
 
 int Tree::draw(){
 
+	
 	int r = drawAux(&start);
+	glLoadIdentity();
 	glLineWidth(0.5);
-	glBegin(GL_LINES);
-		glVertex3f(0, 0, 0);
-		if(currentPoints.size() > 0) printf("Last Point is: %f %f %f\n", currentPoints.back()->x, currentPoints.back()->y, currentPoints.back()->z);
+	glBegin(GL_LINE_STRIP);
+		//glVertex3f(0, 0, 0);
+		//if(currentPoints.size() > 0) printf("Last Point is: %f %f %f\n", currentPoints.back()->x, currentPoints.back()->y, currentPoints.back()->z);
 		while (currentPoints.size() > 0) {
 			glVertex3fv(currentPoints.front()->toVec3f());
 			currentPoints.pop_front();
