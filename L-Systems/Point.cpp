@@ -19,3 +19,90 @@ float * Point::toVec3f(){
 	float vec[3] = { x, y, z };
 	return vec;
 }
+
+Point& Point::operator=(const Point& src) {
+	x = src.x;
+	y = src.y;
+	z = src.z;
+	return *this;
+}
+Point Point::operator*(const Point& alt) {
+	Point p(x * alt.x, y * alt.y, z * alt.z);
+	return p;
+}
+Point Point::operator/(const Point& alt) {
+	Point p(x / alt.x, y / alt.y, z / alt.z);
+	return p;
+}
+Point Point::operator-(const Point& alt) {
+	Point p(x - alt.x, y - alt.y, z - alt.z);
+	return p;
+}
+Point Point::operator+(const Point& alt) {
+	Point p(x + alt.x, y + alt.y, z + alt.z);
+	return p;
+}
+Point Point::operator*(float num) {
+	Point p(x * num, y * num, z * num);
+	return p;
+}
+Point Point::operator/(float num) {
+	Point p(x / num, y / num, z / num);
+	return p;
+}
+Point Point::operator-(float num) {
+	Point p(x - num, y - num, z - num);
+	return p;
+}
+Point Point::operator+(float num) {
+	Point p(x + num, y + num, z + num);
+	return p;
+}
+Point Point::operator*=(const Point& alt) {
+	x *= alt.x;
+	y *= alt.y;
+	z *= alt.z;
+	return *this;
+}
+Point Point::operator/=(const Point& alt) {
+	x /= alt.x;
+	y /= alt.y;
+	z /= alt.z;
+	return *this;
+}
+Point Point::operator-=(const Point& alt) {
+	x -= alt.x;
+	y -= alt.y;
+	z -= alt.z;
+	return *this;
+}
+Point Point::operator+=(const Point& alt) {
+	x += alt.x;
+	y += alt.y;
+	z += alt.z;
+	return *this;
+}
+Point Point::operator*=(float num) {
+	x *= num;
+	y *= num;
+	z *= num;
+	return *this;
+}
+Point Point::operator/=(float num) {
+	x /= num;
+	y /= num;
+	z /= num;
+	return *this;
+}
+Point Point::operator-=(float num) {
+	x -= num;
+	y -= num;
+	z -= num;
+	return *this;
+}
+Point Point::operator+=(float num) {
+	x += num;
+	y += num;
+	z += num;
+	return *this;
+}

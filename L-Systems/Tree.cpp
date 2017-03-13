@@ -211,6 +211,8 @@ bool isLastFromStage(TreeNode * current) {
 	return true;
 }
 
+
+
 int Tree::drawBranch(TreeNode * current){ //TODO: check and fix!
 	
 	//glPushMatrix();
