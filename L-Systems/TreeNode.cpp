@@ -58,6 +58,8 @@ TreeNode::TreeNode(char type, TreeNode * father, int stage){
 	/*maxWidth = 1;
 	maxLength = 1;*/
 	this->stage = stage;
+	circlePoints = vector<Point>();
+	centralPoint = Point(0, 0, 0);
 	nodes = list<TreeNode*>();
 	color[0] = 0;
 	color[1] = 1;
@@ -75,6 +77,8 @@ TreeNode::TreeNode(const TreeNode &node) {
 	this->length = node.length;
 	this->degree = node.degree;
 	this->stage = node.stage;
+	circlePoints = vector<Point>();
+	centralPoint = Point(0, 0, 0);
 	this->nodes = list<TreeNode*>(node.nodes);
 	this->color[0] = node.color[0];
 	this->color[1] = node.color[1];
@@ -175,6 +179,21 @@ list<TreeNode*> TreeNode::getNodes(){
 
 void TreeNode::addNode(TreeNode* node){
 	nodes.push_back(node);
+}
+
+Point TreeNode::getCentralPoint(){
+	return this->centralPoint;
+}
+
+int TreeNode::setCentralPoint(Point p){
+	//if (p == nullptr) return TREE_NODE_NULL_POINT;
+	this->centralPoint = p;
+	return TREE_NODE_DONE;
+}
+
+int TreeNode::setCentralPoint(float x, float y, float z){
+	this->centralPoint = Point(x, y, z);
+	return TREE_NODE_DONE;
 }
 
 vector<Point> TreeNode::getCirclePoints(){
@@ -351,5 +370,11 @@ int TreeNode::getBranchNumber(){
 	}
 
 	return r;
+}
+
+int TreeNode::clearPoints(){
+	this->centralPoint = { 0,0,0 };
+	circlePoints.clear();
+	return TREE_NODE_DONE;
 }
 

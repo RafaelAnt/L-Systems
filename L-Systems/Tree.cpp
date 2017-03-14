@@ -146,6 +146,11 @@ int Tree::drawIntersection(TreeNode * node){
 	return TREE_DONE;
 }
 
+/*int Tree::clearPoints(){
+	clearPoints(this.start);
+	return TREE_DONE;
+}*/
+
 void Tree::rotL(TreeNode* node) {
 	glRotatef(node->getDegree(), 1, 0, 0);
 	glRotatef(node->getDegree(), 0, 1, 0);
@@ -213,35 +218,31 @@ bool isLastFromStage(TreeNode * current) {
 
 
 
-int Tree::drawBranch(TreeNode * current){ //TODO: check and fix!
+int Tree::buildBranchPoints(TreeNode * current){ //TODO: check and fix!
 	
 	//glPushMatrix();
 	//glRotatef(-90, 1, 0, 0); //rotate the cone
 	//glutSolidCone(current->getWidth(), current->getLength(), 5, 5);
 
-	if(current->getStage() == 1){
-		GLfloat modelMatrix[16];
+
+	GLfloat modelMatrix[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
+
+	//Point currentPoint = Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
+	current->setCentralPoint((float)modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
+		
+	//currentPoints.push_back(currentPoint);
+
+	// pra desenhar o ultimo
+	/*if (isLastFromStage(current)) {
+		glPushMatrix();
+		glTranslatef(0, current->getLength(), 0);
 		glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
-
-		/*printf("\n");
-		printf("\n");
-		for (int i = 0; i < 16; i++) {
-			printf("%f  ", (float)modelMatrix[i]);
-			if (i == 3 || i == 7 || i == 11) printf("\n");
-		}
-		printf("\n");*/
-		Point currentPoint = Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
+		currentPoint = Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
 		currentPoints.push_back(currentPoint);
-
-		if (isLastFromStage(current)) {
-			glPushMatrix();
-			glTranslatef(0, current->getLength(), 0);
-			glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
-			currentPoint = Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
-			currentPoints.push_back(currentPoint);
-			glPopMatrix();
-		}
-	}
+		glPopMatrix();
+	}*/
+	
 
 	/*glBegin(GL_TRIANGLE_STRIP);
 	for (float i = 0; i < 2 * 3.14; i += 0.5) {
@@ -262,7 +263,7 @@ int Tree::drawBranch(TreeNode * current){ //TODO: check and fix!
 	return TREE_DONE;
 }
 
-int Tree::drawAux(TreeNode* node) {
+int Tree::buildpoints(TreeNode* node) {
 	list<TreeNode*>::iterator it;
 	list<TreeNode*> nodes = node->getNodes();
 	TreeNode* aux;
@@ -273,7 +274,7 @@ int Tree::drawAux(TreeNode* node) {
 	case 'F':
 		if (node->getLength() > 0) {
 			//drawLine(node);
-			drawBranch(node);
+			buildBranchPoints(node);
 			glTranslatef(0, node->getLength(), 0);
 			drawIntersection(node);
 		}
@@ -299,7 +300,7 @@ int Tree::drawAux(TreeNode* node) {
 			if (aux->getStage() > node->getStage()) {
 				glPushMatrix();
 			}
-			r = drawAux(aux);
+			r = buildpoints(aux);
 			if (r != TREE_DONE) return r;
 			if (aux->getStage() > node->getStage()) {
 				glPopMatrix();
@@ -311,11 +312,36 @@ int Tree::drawAux(TreeNode* node) {
 	return TREE_DONE;
 }
 
+vector<Point> currentPoints;
+
+int gatherPoints(TreeNode* current) {
+	list<TreeNode*>::iterator it;
+	list<TreeNode*> nodes;
+
+	// main stage so far...
+	if (current->getStage() == 1 && current->getLength()>0) {
+		if (current->getType() == 'F') {
+			currentPoints.push_back(current->getCentralPoint());
+		}
+		
+
+		nodes = current->getNodes();
+
+		for (it = nodes.begin(); it != nodes.end(); it++) {
+			gatherPoints(*it);
+		}
+	}
+
+
+	return TREE_DONE;
+}
 
 int Tree::draw(){
-
 	
-	int r = drawAux(&start);
+	
+	int r = buildpoints(&start);
+
+	gatherPoints(&start);
 
 	vector<Point> drawingPoints = bezierPath(currentPoints, 8);
 

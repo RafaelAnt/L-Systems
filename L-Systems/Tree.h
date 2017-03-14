@@ -29,7 +29,7 @@ class Tree {
 	float widthGrowthRate;
 	float angleGrowthRate;
 	float angle;
-	vector<Point> currentPoints;
+
 
 public:
 	Tree();
@@ -57,13 +57,14 @@ public:
 
 
 private:
-	int drawAux(TreeNode* node);
+	int buildpoints(TreeNode* node);
 	void rotL(TreeNode* node);
 	void rotR(TreeNode* node);
 	int incrementLength(TreeNode *current);
 	int incrementWidth(TreeNode *current);
 	int incrementDegree(TreeNode *current);
-	int drawBranch(TreeNode *current);
+	int buildBranchPoints(TreeNode *current);
 	int drawLine(TreeNode *node);
 	int drawIntersection(TreeNode* node);
+	int clearPoints();
 };
