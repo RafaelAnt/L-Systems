@@ -9,6 +9,7 @@
 #include "ProductionRule.h"
 #include "TreeNode.h"
 #include "Point.h"
+#include "Bezier.h"
 
 #define TREE_DONE 200
 #define TREE_INVALID_VALUE 201
@@ -28,7 +29,7 @@ class Tree {
 	float widthGrowthRate;
 	float angleGrowthRate;
 	float angle;
-	deque<Point*> currentPoints;
+	vector<Point> currentPoints;
 
 public:
 	Tree();

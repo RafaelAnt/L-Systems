@@ -230,14 +230,14 @@ int Tree::drawBranch(TreeNode * current){ //TODO: check and fix!
 			if (i == 3 || i == 7 || i == 11) printf("\n");
 		}
 		printf("\n");*/
-		Point * currentPoint = new Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
+		Point currentPoint = Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
 		currentPoints.push_back(currentPoint);
 
 		if (isLastFromStage(current)) {
 			glPushMatrix();
 			glTranslatef(0, current->getLength(), 0);
 			glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
-			Point * currentPoint = new Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
+			currentPoint = Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
 			currentPoints.push_back(currentPoint);
 			glPopMatrix();
 		}
@@ -316,16 +316,26 @@ int Tree::draw(){
 
 	
 	int r = drawAux(&start);
+
+	vector<Point> drawingPoints = bezierPath(currentPoints, 8);
+
 	glLoadIdentity();
 	glLineWidth(0.5);
+	
+
+	//glVertex3f(0, 0, 0);
+	//if(currentPoints.size() > 0) printf("Last Point is: %f %f %f\n", currentPoints.back()->x, currentPoints.back()->y, currentPoints.back()->z);
+
+
 	glBegin(GL_LINE_STRIP);
-		//glVertex3f(0, 0, 0);
-		//if(currentPoints.size() > 0) printf("Last Point is: %f %f %f\n", currentPoints.back()->x, currentPoints.back()->y, currentPoints.back()->z);
-		while (currentPoints.size() > 0) {
-			glVertex3fv(currentPoints.front()->toVec3f());
-			currentPoints.pop_front();
-		}
+
+	for (int i = 0; i < (int)drawingPoints.size(); i++) {
+		glVertex3fv(drawingPoints[i].toVec3f());
+	}
+
 	glEnd();
+	drawingPoints.clear();
+	currentPoints.clear();
 	return r;
 }
 

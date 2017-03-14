@@ -1,5 +1,8 @@
 #include <math.h>
 #include <assert.h>
+
+
+
 #include "Bezier.h"
 
 using namespace std;
@@ -26,6 +29,52 @@ Point calculateBezierPoint(Point p0, Point p1, Point p2, Point p3, float t) {
 	p += p3 * ttt; //fourth term
 
 	return p;
+}
+
+Point calculateBezierPoint(Point p0, Point p1, Point p2, float t) {
+	float u = 1 - t;
+	float tt = t*t;
+	float uu = u*u;
+	Point r = p0 * tt + p1 * (2 * t * u) + p2 * uu;
+	return r;
+}
+
+vector<Point> bezierPath (vector<Point> controlPoints, int segmentsNumber){
+	
+	vector<Point> drawingPoints;
+
+	for (int i = 0; i < controlPoints.size()-1; i += 3){
+		if (i + 2 == controlPoints.size()-1) {
+			for (int j = 1; j <= segmentsNumber; j++) {
+				float t = j / (float)segmentsNumber;
+				drawingPoints.push_back(calculateBezierPoint(controlPoints[i], controlPoints[i+1], controlPoints[i+2], t));
+			}
+			return drawingPoints;
+		}
+		if (i + 1 == controlPoints.size()-1) {
+			drawingPoints.push_back(controlPoints[i + 1]);
+			return drawingPoints;
+		}
+		
+		Point p0 = controlPoints[i];
+		Point p1 = controlPoints[i + 1];
+		Point p2 = controlPoints[i + 2];
+		Point p3 = controlPoints[i + 3];
+
+		//Only do this for the first endpoint.
+		//When i != 0, this coincides with the end
+		//point of the previous segment
+		if (i == 0){
+			drawingPoints.push_back(calculateBezierPoint(p0, p1, p2, p3, 0));
+		}
+
+		for (int j = 1; j <= segmentsNumber; j++){
+			float t = j / (float)segmentsNumber;
+			drawingPoints.push_back(calculateBezierPoint(p0, p1, p2, p3, t));
+		}
+	}
+
+	return drawingPoints;
 }
 
 void prodVectorial(float * a, float * b, float * res) {
