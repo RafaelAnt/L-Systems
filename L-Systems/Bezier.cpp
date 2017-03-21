@@ -1,8 +1,6 @@
 #include <math.h>
 #include <assert.h>
 
-
-
 #include "Bezier.h"
 
 using namespace std;
@@ -14,6 +12,75 @@ void makeControlPoints(int patch, Point pontos_control[][4], vector<Point> verti
 			pontos_control[i][j] = vertices[indices[patch][k] - 1];
 		}
 	}
+}
+
+Point calculateCatmullromPoint(Point p0, Point p1, Point p2, Point p3, float t) {
+	float u = 1 - t;
+	float tt = t*t;
+	float uu = u*u;
+	float uuu = uu * u;
+	float ttt = tt * t;
+
+	Point p = p1*2;
+	p += (p2 - p0) * t;
+	p += ((p0*2) -  (p1*5) + (p2*4) - p3) * tt;
+	p += ((p1*3) - p0 - (p2*3) + p3) * ttt;
+
+	p = p * 0.5;
+
+	return p;
+}
+
+vector<Point> catmullromPath(vector<Point> controlPoints, int segmentsNumber) {
+	vector<Point> drawingPoints;
+
+	if (controlPoints.size() < 4) {
+		//drawingPoints = controlPoints;
+		return drawingPoints;
+	}
+
+	for (int i = 0; i < controlPoints.size() - 3; i ++) {
+		/*if (i + 2 == controlPoints.size() - 1) {
+			for (int j = 1; j <= segmentsNumber; j++) {
+				float t = j / (float)segmentsNumber;
+				drawingPoints.push_back(calculateBezierPoint(controlPoints[i], controlPoints[i + 1], controlPoints[i + 2], t));
+			}
+			return drawingPoints;
+		}
+		if (i + 1 == controlPoints.size() - 1) {
+			drawingPoints.push_back(controlPoints[i + 1]);
+			return drawingPoints;
+		}*/
+
+		Point p0 = controlPoints[i];
+		Point p1 = controlPoints[i + 1];
+		Point p2 = controlPoints[i + 2];
+		Point p3 = controlPoints[i + 3];
+
+		//Only do this for the first endpoint.
+		//When i != 0, this coincides with the end
+		//point of the previous segment
+		if (i == 0) {
+			drawingPoints.push_back(calculateCatmullromPoint(p0, p1, p2, p3, 0));
+		}
+
+		for (int j = 1; j <= segmentsNumber; j++) {
+			float t = j / (float)segmentsNumber;
+			drawingPoints.push_back(calculateCatmullromPoint(p0, p1, p2, p3, t));
+		}
+
+		//the end
+		if (i+3 == controlPoints.size()-1) {
+			/*while (i<controlPoints.size()) {
+				drawingPoints.push_back(controlPoints[i]);
+				i++;
+			}*/
+
+			break;
+		}
+	}
+
+	return drawingPoints;
 }
 
 Point calculateBezierPoint(Point p0, Point p1, Point p2, Point p3, float t) {
@@ -38,6 +105,8 @@ Point calculateBezierPoint(Point p0, Point p1, Point p2, float t) {
 	Point r = p0 * tt + p1 * (2 * t * u) + p2 * uu;
 	return r;
 }
+
+
 
 vector<Point> bezierPath (vector<Point> controlPoints, int segmentsNumber){
 	

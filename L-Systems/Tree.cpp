@@ -1,7 +1,6 @@
 #include "Tree.h"
 
-//TODO: Change to Dynamic
-
+vector<Point> currentPoints;
 
 Tree::Tree(){
 	//printf("Usei o mau\n");
@@ -196,27 +195,29 @@ int Tree::incrementDegree(TreeNode * current){
 	return TREE_DONE;
 }
 
+
 bool isLastFromStage(TreeNode * current) {
 	int stage = current->getStage();
 	list<TreeNode*> nodes = current->getNodes();
 	list<TreeNode*>::iterator it;
 	TreeNode * aux;
 
-
 	if (nodes.size() == 0) return true;
 
 	for (it = nodes.begin(); it != nodes.end(); it++) {
 		aux = *it;
-		if ((aux->getType() == '+' || aux->getType() == '-') && aux->getStage() == stage) {
-			if (!isLastFromStage(aux)) return false;
+		if (aux->getStage() == stage) {
+			if (aux->getType() == 'F' && aux->getLength() > 0) return false;
+			if ((aux->getType() == '+' || aux->getType() == '-')) {
+				if (!isLastFromStage(aux)) return false;
+			}
 		}
-		if (aux->getType() == 'F' && aux->getStage() == stage && aux->getLength() > 0) return false;
 	}
 
 	return true;
 }
 
-
+Point last;
 
 int Tree::buildBranchPoints(TreeNode * current){ //TODO: check and fix!
 	
@@ -234,14 +235,13 @@ int Tree::buildBranchPoints(TreeNode * current){ //TODO: check and fix!
 	//currentPoints.push_back(currentPoint);
 
 	// pra desenhar o ultimo
-	/*if (isLastFromStage(current)) {
+	if (isLastFromStage(current) && current->getStage()== 1) {
 		glPushMatrix();
 		glTranslatef(0, current->getLength(), 0);
 		glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
-		currentPoint = Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
-		currentPoints.push_back(currentPoint);
+		last = Point((float) modelMatrix[12], (float)modelMatrix[13], (float)modelMatrix[14]);
 		glPopMatrix();
-	}*/
+	}
 	
 
 	/*glBegin(GL_TRIANGLE_STRIP);
@@ -312,7 +312,7 @@ int Tree::buildpoints(TreeNode* node) {
 	return TREE_DONE;
 }
 
-vector<Point> currentPoints;
+
 
 int gatherPoints(TreeNode* current) {
 	list<TreeNode*>::iterator it;
@@ -330,10 +330,17 @@ int gatherPoints(TreeNode* current) {
 		for (it = nodes.begin(); it != nodes.end(); it++) {
 			gatherPoints(*it);
 		}
+		currentPoints.push_back(last);
 	}
 
-
+	//last = { 0, 0, 0 };
 	return TREE_DONE;
+}
+
+Point findLastPointForCatmullrom(Point p1, Point p2) {
+	Point p = p2 - p1;
+	p = p2 + p;
+	return p;
 }
 
 int Tree::draw(){
@@ -341,9 +348,18 @@ int Tree::draw(){
 	
 	int r = buildpoints(&start);
 
+	//add imaginary first point;
+	currentPoints.push_back(Point(0, -1, 0));
 	gatherPoints(&start);
+	//add imaginary last point
+	if (currentPoints.size() > 2) {
+		//currentPoints.push_back(findLastPointForCatmullrom(currentPoints[currentPoints.size() - 2], currentPoints[currentPoints.size() - 1]));
 
-	vector<Point> drawingPoints = bezierPath(currentPoints, 8);
+	}
+	
+	else return TREE_NOT_ENOUGH_POINTS_FOR_CATMULLROM; //TODO fix
+
+	vector<Point> drawingPoints = catmullromPath(currentPoints, 8);
 
 	glLoadIdentity();
 	glLineWidth(0.5);

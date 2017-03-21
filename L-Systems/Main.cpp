@@ -127,8 +127,8 @@ void display(void) {
 
 	// Tree
 	result = plant.draw();
-	if (result != TREE_DONE) {
-		printf("Fatal Error!\n");
+	if (result != TREE_DONE && result != TREE_NOT_ENOUGH_POINTS_FOR_CATMULLROM) {
+		printf("Fatal Error: %d\n", result);
 		exit(0);
 	}
 	
@@ -138,12 +138,14 @@ void display(void) {
 }
 
 void animate() {
+
 	if (lastTime == 0) lastTime = timeGetTime();
-		
 	elapsedTime = timeGetTime() - lastTime;
 
-	if (plant.animate(elapsedTime) != TREE_DONE) {
-		printf("Fatal Error!\n");
+	int r = plant.animate(elapsedTime);
+
+	if (r != TREE_DONE && r != TREE_NOT_ENOUGH_POINTS_FOR_CATMULLROM) {
+		printf("Fatal Error: %d\n", r);
 		exit(0);
 	}
 

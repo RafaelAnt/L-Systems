@@ -18,6 +18,7 @@ typedef struct patch {
 	vector<vector<Point>> normais;
 }Patch;
 
+vector<Point> catmullromPath(vector<Point> controlPoints, int segmentsNumber);
 vector<Point> bezierPath(vector<Point> controlPoints, int segmentsNumber);
 Point calculateBezierPoint(Point p0, Point p1, Point p2, Point p3, float t);
 
