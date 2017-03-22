@@ -10,7 +10,7 @@
 #include "Tree.h"
 
 #define PI 3.1415
-#define EXPANSIONS_NUMBER 3
+#define EXPANSIONS_NUMBER 1
 
 using namespace std;
 

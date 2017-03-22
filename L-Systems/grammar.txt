@@ -11,13 +11,15 @@ X=FF+[+F]+[-F]
 
 % Others:
 
+
 #AXIOM
 F
 #DEGREES
-30
+25
 #PRODUCTION
-F=FFF
+F=F+F-[+F][-F]
 #END
+
 ****
 Depois do #END não faz nada...
 
